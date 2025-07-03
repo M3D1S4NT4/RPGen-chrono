@@ -1,0 +1,634 @@
+[
+  {
+    "techs": {
+    "singleTechs": {
+      "Crono": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Cyclone",       "MP": 2,  "TP": 5,   "element": null,  "target": "Circle of enemies", "description": "Whirl about enemy, striking others nearby." },
+        { "name": "Wind Slash",    "MP": 2,  "TP": 90,  "element": "Light", "target": "Line of enemies",   "description": "Hit all enemies in a line with a wave of wind." },
+        { "name": "Lightning",    "MP": 2,  "TP": 0,"element": "Light", "target": "One enemy",       "description": "Attack an enemy with lightning." },
+        { "name": "Cleave (Spincut)", "MP": 4, "TP": 200, "element": null, "target": "One enemy",       "description": "Deal double damage to one enemy." },
+        { "name": "Lightning II", "MP": 8,  "TP": 500, "element": "Light", "target": "All enemies",     "description": "Attack all enemies with lightning." },
+        { "name": "Raise (Life)", "MP": 10, "TP": 400, "element": null,  "target": "One ally",        "description": "Revive a KO'd ally (restore them to life)." },
+        { "name": "Frenzy (Confuse)", "MP": 12, "TP": 800, "element": null,"target": "One enemy",     "description": "Strike one enemy 4 times in succession." },
+        { "name": "Luminaire",    "MP": 20, "TP": 1000,"element": "Light", "target": "All enemies",    "description": "Attack all enemies with holy light." }
+      ],
+      "Marle": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Aura",       "MP": 1,  "TP": 10,  "element": null,  "target": "One ally",    "description": "Restore a small amount of HP to one ally." },
+        { "name": "Allure (Provoke)", "MP": 1, "TP": 50, "element": null, "target": "One enemy",  "description": "Confuse a target enemy." },
+        { "name": "Ice",        "MP": 2,  "TP": 0,"element": "Water","target": "One enemy",   "description": "Attack an enemy with ice." },
+        { "name": "Cure",       "MP": 2,  "TP": 150, "element": null,  "target": "One ally",    "description": "Restore a moderate amount of HP to one ally." },
+        { "name": "Haste",      "MP": 6,  "TP": 250, "element": null,  "target": "One ally",    "description": "Halve the waiting time between that ally's turns." },
+        { "name": "Ice II",     "MP": 8,  "TP": 400, "element": "Water","target": "All enemies", "description": "Attack all enemies with ice." },
+        { "name": "Cure II",    "MP": 5,  "TP": 600, "element": null,  "target": "One ally",    "description": "Greatly restore HP to one ally." },
+        { "name": "Arise (Life2)", "MP": 15, "TP": 900, "element": null, "target": "One ally", "description": "Revive a fallen ally and fully heal them." }
+      ],
+      "Lucca": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Flamethrower (Flame Toss)", "MP": 1,  "TP": 10,  "element": "Fire",  "target": "Line of enemies", "description": "Burn enemies along a direct line in front." },
+        { "name": "Hypnowave (Hypno Wave)",    "MP": 1,  "TP": 60,  "element": null,   "target": "All enemies",    "description": "Put all enemies to sleep." },
+        { "name": "Fire",        "MP": 2,  "TP": 0,"element": "Fire", "target": "One enemy",   "description": "Attack one enemy with fire." },
+        { "name": "Napalm (Napalm Bomb)", "MP": 4, "TP": 150, "element": "Fire", "target": "Circle of enemies", "description": "Bomb enemies within a circle (area effect)."},
+        { "name": "Protect",     "MP": 6,  "TP": 250, "element": null,  "target": "One ally",    "description": "Boost one ally's Defense (physical defense up)." },
+        { "name": "Fire II",     "MP": 8,  "TP": 400, "element": "Fire", "target": "All enemies", "description": "Attack all enemies with fire." },
+        { "name": "Megaton Bomb (Mega Bomb)", "MP": 15, "TP": 600, "element": "Fire", "target": "Circle of enemies", "description": "Blast enemies in a circle with a huge explosion." },
+        { "name": "Flare",       "MP": 20, "TP": 900, "element": "Fire", "target": "All enemies", "description": "Attack all enemies with an intense fire attack." }
+      ],
+      "Frog": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Slurp",       "MP": 1,  "TP": 10,  "element": null,  "target": "One ally",    "description": "Restore a small amount of HP to one ally (using Frog's tongue)." },
+        { "name": "Slurp Slash (Slurp Cut)", "MP": 2, "TP": 15, "element": null, "target": "One enemy", "description": "Pull an enemy with tongue and then slash it." },
+        { "name": "Water",       "MP": 2,  "TP": 0,"element": "Water","target": "One enemy",   "description": "Attack an enemy with a water spell." },
+        { "name": "Heal",        "MP": 2,  "TP": 10,  "element": null,  "target": "All allies",  "description": "Restore a moderate amount of HP to all allies." },
+        { "name": "Aerial Strike (Leap Slash)", "MP": 4, "TP": 250, "element": null, "target": "One enemy", "description": "Leap into the air and dive onto one enemy with a sword strike." },
+        { "name": "Water II",    "MP": 8,  "TP": 400, "element": "Water","target": "All enemies", "description": "Attack all enemies with a powerful water spell." },
+        { "name": "Cure II",     "MP": 5,  "TP": 600, "element": null,  "target": "One ally",    "description": "Greatly restore HP to one ally (same effect as Marle's Cure II)." },
+        { "name": "Frog Squash", "MP": 15, "TP": 1000,"element": null,  "target": "All enemies", "description": "Hit all enemies -- damage increases dramatically when Frog's HP is low." }
+      ],
+      "Robo": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Rocket Punch", "MP": 1,  "TP": 0,"element": null,  "target": "One enemy",   "description": "Launch Robo's fist at one enemy to deal damage." },
+        { "name": "Cure Beam",   "MP": 2,  "TP": 0,"element": null,  "target": "One ally",    "description": "Restore a small amount of HP to one ally (Robo's heal beam)." },
+        { "name": "Laser Spin",  "MP": 3,  "TP": 5,   "element": "Shadow", "target": "All enemies", "description": "Attack all enemies with a 360° laser spin (Shadow elemental)." },
+        { "name": "Robo Tackle", "MP": 4,  "TP": 150, "element": null,  "target": "One enemy",   "description": "Charge and tackle one enemy, dealing physical damage." },
+        { "name": "Heal Beam",   "MP": 3,  "TP": 400, "element": null,  "target": "All allies",  "description": "Restore a small amount of HP to all allies (party-wide heal)." },
+        { "name": "Rapid-fire Fist (Uzzi Punch)", "MP": 12, "TP": 600,"element": null,"target": "One enemy", "description": "Barrage one enemy with a series of rocket punches." },
+        { "name": "Proximity Bomb (Area Bomb)",   "MP": 14, "TP": 800,"element": "Fire",  "target": "Enemies near Robo", "description": "Blast all enemies near Robo with a fiery explosion." },
+        { "name": "Electrocute (Shock)", "MP": 17, "TP": 1000,"element": "Light","target": "All enemies", "description": "Zap all enemies with a powerful electrical surge." }
+      ],
+      "Ayla": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Kiss",           "MP": 1,  "TP": 10,   "element": null,  "target": "One ally",    "description": "Lightly heal one ally and cure their status ailments." },
+        { "name": "Roundillo Kick (Rollo Kick)", "MP": 2, "TP": 60, "element": null, "target": "One enemy", "description": "Perform a jumping roll-kick on one enemy." },
+        { "name": "Cat Attack",    "MP": 3,  "TP": 100,  "element": null,  "target": "One enemy",   "description": "Savage an enemy with a claw and bite combo." },
+        { "name": "Boulder Toss (Rock Throw)", "MP": 4, "TP": 200, "element": null, "target": "One enemy", "description": "Grab and throw a single enemy into the air like a boulder." },
+        { "name": "Charm",         "MP": 4,  "TP": 400,  "element": null,  "target": "One enemy",   "description": "Seduce an enemy to steal an item from it." },
+        { "name": "Tail Spin",     "MP": 10, "TP": 600,  "element": null,  "target": "Enemies near Ayla", "description": "Spin into nearby enemies with Ayla's tail, hitting all around her." },
+        { "name": "Dino Tail",     "MP": 15, "TP": 800,  "element": null,  "target": "All enemies", "description": "Hit all foes with a massive tail attack - more damage when Ayla's HP is low." },
+        { "name": "Triple Kick",   "MP": 20, "TP": 1000, "element": null,  "target": "One enemy",   "description": "Deliver a combo of 3 powerful kicks to one enemy." }
+      ],
+      "Magus": [
+        { "name": "Attack", "MP": 0, "TP": 0, "element": null, "target": "One enemy", "description": "Ataque físico básico." },
+        { "name": "Lightning II",  "MP": 8,  "TP": 0,"element": "Light","target": "All enemies", "description": "Attack all enemies with a lightning spell." },
+        { "name": "Ice II",        "MP": 8,  "TP": 0,"element": "Water","target": "All enemies", "description": "Attack all enemies with an ice spell." },
+        { "name": "Fire II",       "MP": 8,  "TP": 0,"element": "Fire", "target": "All enemies", "description": "Attack all enemies with a fire spell." },
+        { "name": "Dark Bomb",     "MP": 8,  "TP": 400, "element": "Shadow","target": "Circle of enemies", "description": "Detonate a dark bomb that hits enemies in a radius." },
+        { "name": "Barrier (Magic Wall)", "MP": 8, "TP": 400, "element": null, "target": "One ally", "description": "Boost one ally's Magic Defense (magical barrier up)." },
+        { "name": "Dark Mist",     "MP": 10, "TP": 400, "element": "Shadow","target": "All enemies", "description": "Attack all enemies with a cloud of darkness." },
+        { "name": "Black Hole",    "MP": 15, "TP": 900, "element": null,  "target": "Area (circle)", "description": "Attempt to suck in and instantly kill enemies in a small area (may fail on strong foes)." },
+        { "name": "Dark Matter",   "MP": 20, "TP": 900, "element": "Shadow","target": "All enemies", "description": "Unleash the ultimate darkness spell on all enemies." }
+      ]
+    },
+    "doubleTechs": [
+      {
+        "name": "Aura Whirl",
+        "characters": ["Crono", "Marle"],
+        "prerequisites": [ {"tech": "Cyclone", "user": "Crono"}, {"tech": "Aura", "user": "Marle"} ],
+        "MPcost": { "Crono": 2, "Marle": 1 },
+        "target": "All allies",
+        "description": "Restore a small amount of HP to all allies."
+      },
+      {
+        "name": "Ice Sword",
+        "characters": ["Crono", "Marle"],
+        "prerequisites": [ {"tech": "Cleave", "user": "Crono"}, {"tech": "Ice", "user": "Marle"} ],
+        "MPcost": { "Crono": 4, "Marle": 2 },
+        "target": "One enemy",
+        "description": "Strike a foe with an ice-enchanted blade (Crono attacks with Ice element)."
+      },
+      {
+        "name": "Ice Sword II",
+        "characters": ["Crono", "Marle"],
+        "prerequisites": [ {"tech": "Frenzy", "user": "Crono"}, {"tech": "Ice II", "user": "Marle"} ],
+        "MPcost": { "Crono": 12, "Marle": 8 },
+        "target": "Circle of enemies",
+        "description": "Hit all foes in a circle with a powerful ice sword attack."
+      },
+      {
+        "name": "Fire Whirl",
+        "characters": ["Crono", "Lucca"],
+        "prerequisites": [ {"tech": "Cyclone", "user": "Crono"}, {"tech": "Flamethrower", "user": "Lucca"} ],
+        "MPcost": { "Crono": 2, "Lucca": 1 },
+        "target": "Circle of enemies",
+        "description": "Attack all enemies in a circle with a spinning fire attack."
+      },
+      {
+        "name": "Fire Sword",
+        "characters": ["Crono", "Lucca"],
+        "prerequisites": [ {"tech": "Cleave", "user": "Crono"}, {"tech": "Fire", "user": "Lucca"} ],
+        "MPcost": { "Crono": 4, "Lucca": 2 },
+        "target": "One enemy",
+        "description": "Strike a foe with a fire-enchanted blade (Crono attacks with Fire element)."
+      },
+      {
+        "name": "Fire Sword II",
+        "characters": ["Crono", "Lucca"],
+        "prerequisites": [ {"tech": "Frenzy", "user": "Crono"}, {"tech": "Fire II", "user": "Lucca"} ],
+        "MPcost": { "Crono": 12, "Lucca": 8 },
+        "target": "Circle of enemies",
+        "description": "Hit all foes in a circle with a powerful fire sword attack."
+      },
+      {
+        "name": "Supersonic Spin (Rocket Roll)",
+        "characters": ["Crono", "Robo"],
+        "prerequisites": [ {"tech": "Cyclone", "user": "Crono"}, {"tech": "Laser Spin", "user": "Robo"} ],
+        "MPcost": { "Crono": 2, "Robo": 3 },
+        "target": "All enemies",
+        "description": "Attack all enemies with a combination of spin attacks and lasers (Shadow damage)."
+      },
+      {
+        "name": "Cyclone Sweep (Max Cyclone)",
+        "characters": ["Crono", "Robo"],
+        "prerequisites": [ {"tech": "Cleave", "user": "Crono"}, {"tech": "Laser Spin", "user": "Robo"} ],
+        "MPcost": { "Crono": 4, "Robo": 3 },
+        "target": "Enemies near Robo",
+        "description": "Robo picks up Crono and spins him, slashing enemies near Robo."
+      },
+      {
+        "name": "Megavolt (Super Volt)",
+        "characters": ["Crono", "Robo"],
+        "prerequisites": [ {"tech": "Lightning II", "user": "Crono"}, {"tech": "Electrocute", "user": "Robo"} ],
+        "MPcost": { "Crono": 8, "Robo": 17 },
+        "target": "All enemies",
+        "description": "Blast all enemies with a massive electrical discharge (Light damage)."
+      },
+      {
+        "name": "X-Strike",
+        "characters": ["Crono", "Frog"],
+        "prerequisites": [ {"tech": "Cyclone", "user": "Crono"}, {"tech": "Slurp Slash", "user": "Frog"} ],
+        "MPcost": { "Crono": 2, "Frog": 2 },
+        "target": "One enemy",
+        "description": "Crono and Frog cross-slash a single enemy in an X formation."
+      },
+      {
+        "name": "Sword Stream (Spire)",
+        "characters": ["Crono", "Frog"],
+        "prerequisites": [ {"tech": "Cleave", "user": "Crono"}, {"tech": "Water", "user": "Frog"} ],
+        "MPcost": { "Crono": 4, "Frog": 2 },
+        "target": "One enemy",
+        "description": "Shower an enemy with a stream of water as Frog strikes (Water-element blade)."
+      },
+      {
+        "name": "Lightning Rod (Spire)",
+        "characters": ["Crono", "Frog"],
+        "prerequisites": [ {"tech": "Lightning II", "user": "Crono"}, {"tech": "Aerial Strike", "user": "Frog"} ],
+        "MPcost": { "Crono": 8, "Frog": 4 },
+        "target": "One enemy",
+        "description": "Frog impales an enemy with his sword and Crono strikes it with lightning (Light damage)."
+      },
+      {
+        "name": "Drill Kick",
+        "characters": ["Crono", "Ayla"],
+        "prerequisites": [ {"tech": "Cyclone", "user": "Crono"}, {"tech": "Roundillo Kick", "user": "Ayla"} ],
+        "MPcost": { "Crono": 2, "Ayla": 2 },
+        "target": "One enemy",
+        "description": "Crono launches Ayla in a drilling kick attack at one enemy."
+      },
+      {
+        "name": "Thunder Chomp (Volt Bite)",
+        "characters": ["Crono", "Ayla"],
+        "prerequisites": [ {"tech": "Lightning", "user": "Crono"}, {"tech": "Cat Attack", "user": "Ayla"} ],
+        "MPcost": { "Crono": 2, "Ayla": 3 },
+        "target": "One enemy",
+        "description": "Ayla bites an enemy charged with Crono's lightning for heavy Light damage."
+      },
+      {
+        "name": "Falcon Strike (Falcon Hit)",
+        "characters": ["Crono", "Ayla"],
+        "prerequisites": [ {"tech": "Cleave", "user": "Crono"}, {"tech": "Boulder Toss", "user": "Ayla"} ],
+        "MPcost": { "Crono": 4, "Ayla": 4 },
+        "target": "Line of enemies (horizontal)",
+        "description": "Crono and Ayla dash in a line, hitting all enemies along a horizontal line."
+      },
+      {
+        "name": "Antipode Bomb (Antipode)",
+        "characters": ["Marle", "Lucca"],
+        "prerequisites": [ {"tech": "Ice", "user": "Marle"}, {"tech": "Fire", "user": "Lucca"} ],
+        "MPcost": { "Marle": 2, "Lucca": 2 },
+        "target": "Circle of enemies",
+        "description": "Combine fire and ice to explode on enemies in a radius (Shadow damage)."
+      },
+      {
+        "name": "Antipode Bomb II (Antipode 2)",
+        "characters": ["Marle", "Lucca"],
+        "prerequisites": [ {"tech": "Ice II", "user": "Marle"}, {"tech": "Fire II", "user": "Lucca"} ],
+        "MPcost": { "Marle": 8, "Lucca": 8 },
+        "target": "Circle of enemies",
+        "description": "Stronger version of Antipode: fire and ice blast enemies in a radius (Shadow)."
+      },
+      {
+        "name": "Antipode Bomb III (Antipode 3)",
+        "characters": ["Marle", "Lucca"],
+        "prerequisites": [ {"tech": "Ice II", "user": "Marle"}, {"tech": "Flare", "user": "Lucca"} ],
+        "MPcost": { "Marle": 8, "Lucca": 20 },
+        "target": "All enemies",
+        "description": "The ultimate Antipode: engulf all enemies in massive fire and ice (Shadow)."
+      },
+      {
+        "name": "Aura Beam",
+        "characters": ["Marle", "Robo"],
+        "prerequisites": [ {"tech": "Aura", "user": "Marle"}, {"tech": "Cure Beam", "user": "Robo"} ],
+        "MPcost": { "Marle": 1, "Robo": 2 },
+        "target": "All allies",
+        "description": "Heal all allies for a small amount of HP (combining Marle's and Robo's healing)."
+      },
+      {
+        "name": "Ice Tackle",
+        "characters": ["Marle", "Robo"],
+        "prerequisites": [ {"tech": "Ice", "user": "Marle"}, {"tech": "Robo Tackle", "user": "Robo"} ],
+        "MPcost": { "Marle": 2, "Robo": 4 },
+        "target": "One enemy",
+        "description": "Robo tackles an enemy imbued with ice, dealing Ice-element physical damage."
+      },
+      {
+        "name": "Cure Wind (Cure Touch)",
+        "characters": ["Marle", "Robo"],
+        "prerequisites": [ {"tech": "Cure II", "user": "Marle"}, {"tech": "Heal Beam", "user": "Robo"} ],
+        "MPcost": { "Marle": 5, "Robo": 3 },
+        "target": "All allies",
+        "description": "Greatly restore HP to all allies (combined advanced healing tech)."
+      },
+      {
+        "name": "Ice Water",
+        "characters": ["Marle", "Frog"],
+        "prerequisites": [ {"tech": "Ice", "user": "Marle"}, {"tech": "Water", "user": "Frog"} ],
+        "MPcost": { "Marle": 2, "Frog": 2 },
+        "target": "All enemies",
+        "description": "Drench all enemies in an icy shower (combines Marle's Ice and Frog's Water)."
+      },
+      {
+        "name": "Glacial Freeze (Glacier)",
+        "characters": ["Marle", "Frog"],
+        "prerequisites": [ {"tech": "Ice II", "user": "Marle"}, {"tech": "Water II", "user": "Frog"} ],
+        "MPcost": { "Marle": 8, "Frog": 8 },
+        "target": "One enemy",
+        "description": "Impale one enemy with colossal icicles (powerful Ice/Water attack)."
+      },
+      {
+        "name": "Double Cure",
+        "characters": ["Marle", "Frog"],
+        "prerequisites": [ {"tech": "Cure II", "user": "Marle"}, {"tech": "Cure II", "user": "Frog"} ],
+        "MPcost": { "Marle": 5, "Frog": 5 },
+        "target": "All allies",
+        "description": "Fully restore HP to all allies and remove negative status effects."
+      },
+      {
+        "name": "Twin Charm",
+        "characters": ["Marle", "Ayla"],
+        "prerequisites": [ {"tech": "Allure", "user": "Marle"}, {"tech": "Charm", "user": "Ayla"} ],
+        "MPcost": { "Marle": 1, "Ayla": 4 },
+        "target": "One enemy",
+        "description": "Marle and Ayla team up to greatly increase the success of stealing an item from an enemy."
+      },
+      {
+        "name": "Ice Toss",
+        "characters": ["Marle", "Ayla"],
+        "prerequisites": [ {"tech": "Ice", "user": "Marle"}, {"tech": "Boulder Toss", "user": "Ayla"} ],
+        "MPcost": { "Marle": 2, "Ayla": 4 },
+        "target": "Circle of enemies",
+        "description": "Ayla throws a huge ice chunk (created by Marle) onto enemies in a radius."
+      },
+      {
+        "name": "Iceberg Toss (Cube Toss)",
+        "characters": ["Marle", "Ayla"],
+        "prerequisites": [ {"tech": "Ice II", "user": "Marle"}, {"tech": "Boulder Toss", "user": "Ayla"} ],
+        "MPcost": { "Marle": 8, "Ayla": 4 },
+        "target": "Circle of enemies",
+        "description": "Drop a massive iceberg on enemies in an area (very powerful Ice attack)."
+      },
+      {
+        "name": "Fire Punch",
+        "characters": ["Lucca", "Robo"],
+        "prerequisites": [ {"tech": "Fire", "user": "Lucca"}, {"tech": "Rocket Punch", "user": "Robo"} ],
+        "MPcost": { "Lucca": 2, "Robo": 1 },
+        "target": "Circle of enemies",
+        "description": "Robo punches through enemies with a fist ignited by Lucca's fire (Fire damage in area)."
+      },
+      {
+        "name": "Fire Tackle",
+        "characters": ["Lucca", "Robo"],
+        "prerequisites": [ {"tech": "Fire II", "user": "Lucca"}, {"tech": "Robo Tackle", "user": "Robo"} ],
+        "MPcost": { "Lucca": 8, "Robo": 4 },
+        "target": "One enemy",
+        "description": "Robo tackles an enemy while engulfed in flames (Fire damage to one)."
+      },
+      {
+        "name": "Double Bomb",
+        "characters": ["Lucca", "Robo"],
+        "prerequisites": [ {"tech": "Megaton Bomb", "user": "Lucca"}, {"tech": "Proximity Bomb", "user": "Robo"} ],
+        "MPcost": { "Lucca": 15, "Robo": 14 },
+        "target": "Enemies near Robo",
+        "description": "Lucca and Robo drop explosives, blasting all enemies around Robo (Fire damage)."
+      },
+      {
+        "name": "Flame Kick",
+        "characters": ["Lucca", "Ayla"],
+        "prerequisites": [ {"tech": "Fire", "user": "Lucca"}, {"tech": "Roundillo Kick", "user": "Ayla"} ],
+        "MPcost": { "Lucca": 2, "Ayla": 2 },
+        "target": "One enemy",
+        "description": "Ayla performs a fiery kick on one enemy after Lucca ignites her foot (Fire damage)."
+      },
+      {
+        "name": "Inferno (Fire Whirl*)",
+        "characters": ["Lucca", "Ayla"],
+        "prerequisites": [ {"tech": "Fire II", "user": "Lucca"}, {"tech": "Tail Spin", "user": "Ayla"} ],
+        "MPcost": { "Lucca": 8, "Ayla": 10 },
+        "target": "All enemies",
+        "description": "Ayla creates a whirling flame with Lucca's help, hitting all enemies (Fire elemental)."
+      },
+      {
+        "name": "Blaze Kick",
+        "characters": ["Lucca", "Ayla"],
+        "prerequisites": [ {"tech": "Fire II", "user": "Lucca"}, {"tech": "Triple Kick", "user": "Ayla"} ],
+        "MPcost": { "Lucca": 8, "Ayla": 20 },
+        "target": "One enemy",
+        "description": "Ayla delivers a series of three fiery kicks to one enemy (Fire damage)."
+      },
+      {
+        "name": "Frog Launcher (Blade Toss)",
+        "characters": ["Robo", "Frog"],
+        "prerequisites": [ {"tech": "Laser Spin", "user": "Robo"}, {"tech": "Slurp Slash", "user": "Frog"} ],
+        "MPcost": { "Robo": 3, "Frog": 2 },
+        "target": "Line of enemies",
+        "description": "Robo launches Frog like a projectile, striking enemies in a horizontal line."
+      },
+      {
+        "name": "Bubble Breath (Bubble Snap)",
+        "characters": ["Robo", "Frog"],
+        "prerequisites": [ {"tech": "Robo Tackle", "user": "Robo"}, {"tech": "Water", "user": "Frog"} ],
+        "MPcost": { "Robo": 4, "Frog": 2 },
+        "target": "One enemy",
+        "description": "Frog inflates Robo like a balloon and drops him on an enemy (physical damage)."
+      },
+      {
+        "name": "Cure Wave",
+        "characters": ["Robo", "Frog"],
+        "prerequisites": [ {"tech": "Heal Beam", "user": "Robo"}, {"tech": "Cure II", "user": "Frog"} ],
+        "MPcost": { "Robo": 3, "Frog": 5 },
+        "target": "All allies",
+        "description": "Greatly heal all allies by combining Frog's and Robo's healing energies."
+      },
+      {
+        "name": "Boogie",
+        "characters": ["Robo", "Ayla"],
+        "prerequisites": [ {"tech": "Robo Tackle", "user": "Robo"}, {"tech": "Charm", "user": "Ayla"} ],
+        "MPcost": { "Robo": 4, "Ayla": 4 },
+        "target": "All enemies",
+        "description": "Inflict Stop status on all enemies by performing a strange dance."
+      },
+      {
+        "name": "Spin Kick",
+        "characters": ["Robo", "Ayla"],
+        "prerequisites": [ {"tech": "Robo Tackle", "user": "Robo"}, {"tech": "Roundillo Kick", "user": "Ayla"} ],
+        "MPcost": { "Robo": 4, "Ayla": 2 },
+        "target": "One enemy",
+        "description": "Robo throws Ayla in a spinning kick that strikes one enemy."
+      },
+      {
+        "name": "Beast Toss",
+        "characters": ["Robo", "Ayla"],
+        "prerequisites": [ {"tech": "Rapid-fire Fist", "user": "Robo"}, {"tech": "Boulder Toss", "user": "Ayla"} ],
+        "MPcost": { "Robo": 12, "Ayla": 4 },
+        "target": "One enemy",
+        "description": "Robo and Ayla team up to grab a monster and hurl it away, dealing big damage."
+      },
+      {
+        "name": "Slurp Kiss",
+        "characters": ["Frog", "Ayla"],
+        "prerequisites": [ {"tech": "Slurp", "user": "Frog"}, {"tech": "Kiss", "user": "Ayla"} ],
+        "MPcost": { "Frog": 1, "Ayla": 1 },
+        "target": "All allies",
+        "description": "Heal all allies and cure status by combining Frog's Slurp and Ayla's Kiss."
+      },
+      {
+        "name": "Bubble Burst (Bubble Hit)",
+        "characters": ["Frog", "Ayla"],
+        "prerequisites": [ {"tech": "Water", "user": "Frog"}, {"tech": "Roundillo Kick", "user": "Ayla"} ],
+        "MPcost": { "Frog": 2, "Ayla": 2 },
+        "target": "One enemy",
+        "description": "Ayla drops onto an enemy from above while Frog cushions the impact with a water bubble."
+      },
+      {
+        "name": "Dropdown (Drop Kick)",
+        "characters": ["Frog", "Ayla"],
+        "prerequisites": [ {"tech": "Aerial Strike", "user": "Frog"}, {"tech": "Triple Kick", "user": "Ayla"} ],
+        "MPcost": { "Frog": 4, "Ayla": 20 },
+        "target": "One enemy",
+        "description": "Frog and Ayla perform a devastating drop attack from above on one enemy."
+      },
+      {
+        "name": "Red Needle (Red Pin)",
+        "characters": ["Frog", "Lucca"],
+        "prerequisites": [ {"tech": "Fire", "user": "Lucca"}, {"tech": "Aerial Strike", "user": "Frog"} ],
+        "MPcost": { "Lucca": 2, "Frog": 4 },
+        "target": "One enemy",
+        "description": "Frog leaps and impales an enemy with a fire-imbued strike (Fire damage)."
+      },
+      {
+        "name": "Line Bomb",
+        "characters": ["Frog", "Lucca"],
+        "prerequisites": [ {"tech": "Megaton Bomb", "user": "Lucca"}, {"tech": "Aerial Strike", "user": "Frog"} ],
+        "MPcost": { "Lucca": 15, "Frog": 4 },
+        "target": "Line of enemies",
+        "description": "Lucca drops a bomb that Frog bats in a straight line, hitting all enemies in its path."
+      },
+      {
+        "name": "Frog Flare",
+        "characters": ["Frog", "Lucca"],
+        "prerequisites": [ {"tech": "Flare", "user": "Lucca"}, {"tech": "Frog Squash", "user": "Frog"} ],
+        "MPcost": { "Lucca": 20, "Frog": 15 },
+        "target": "All enemies",
+        "description": "Combine Frog's ultimate physical and Lucca's ultimate magic: massive damage to all enemies (Fire + physical, can exceed normal damage cap)."
+      }
+    ],
+    "tripleTechs": [
+      {
+        "name": "Delta Force",
+        "characters": ["Crono", "Marle", "Lucca"],
+        "prerequisites": [
+          {"tech": "Lightning II", "user": "Crono"},
+          {"tech": "Ice II", "user": "Marle"},
+          {"tech": "Fire II", "user": "Lucca"}
+        ],
+        "MPcost": { "Crono": 8, "Marle": 8, "Lucca": 8 },
+        "target": "All enemies",
+        "description": "Crono, Marle y Lucca combinan luz, hielo y fuego para golpear a todos los enemigos con una gran explosión elemental (daño tipo \"Shadow\" resultante)."
+      },
+      {
+        "name": "Lifeline",
+        "characters": ["Crono", "Marle", "Robo"],
+        "prerequisites": [
+          {"tech": "Cyclone", "user": "Crono"},
+          {"tech": "Arise (Life2)", "user": "Marle"},
+          {"tech": "Laser Spin", "user": "Robo"}
+        ],
+        "MPcost": { "Crono": 15, "Marle": 15, "Robo": 3 },
+        "target": "All allies",
+        "description": "Aplica a todo el equipo un estado de auto-revivir una vez (si un aliado cae en combate, será resucitado automáticamente una vez)."
+      },
+      {
+        "name": "Frost Arc (Arc Impulse)",
+        "characters": ["Crono", "Marle", "Frog"],
+        "prerequisites": [
+          {"tech": "Cleave", "user": "Crono"},
+          {"tech": "Ice II", "user": "Marle"},
+          {"tech": "Aerial Strike", "user": "Frog"}
+        ],
+        "MPcost": { "Crono": 4, "Marle": 8, "Frog": 4 },
+        "target": "One enemy",
+        "description": "Crono y Frog atacan a un enemigo con un golpe de espada combinado, potenciado por el hielo de Marle (gran daño elemental de hielo a un objetivo)."
+      },
+      {
+        "name": "Final Kick",
+        "characters": ["Crono", "Marle", "Ayla"],
+        "prerequisites": [
+          {"tech": "Lightning II", "user": "Crono"},
+          {"tech": "Ice II", "user": "Marle"},
+          {"tech": "Triple Kick", "user": "Ayla"}
+        ],
+        "MPcost": { "Crono": 8, "Marle": 8, "Ayla": 20 },
+        "target": "One enemy",
+        "description": "Marle congela a un enemigo, Ayla le da una poderosa patada y Crono lo electrocuta, todo en un combo devastador en un solo enemigo."
+      },
+      {
+        "name": "Ring of Fire (Fire Zone)",
+        "characters": ["Crono", "Lucca", "Robo"],
+        "prerequisites": [
+          {"tech": "Cleave", "user": "Crono"},
+          {"tech": "Fire II", "user": "Lucca"},
+          {"tech": "Laser Spin", "user": "Robo"}
+        ],
+        "MPcost": { "Crono": 4, "Lucca": 8, "Robo": 3 },
+        "target": "Enemies near Robo",
+        "description": "Robo toma a Crono, y junto con la magia de fuego de Lucca, giran atravesando a los enemigos cercanos con un aro de fuego (daño de Fuego en área alrededor de Robo)."
+      },
+      {
+        "name": "Delta Storm",
+        "characters": ["Crono", "Lucca", "Frog"],
+        "prerequisites": [
+          {"tech": "Lightning II", "user": "Crono"},
+          {"tech": "Fire II", "user": "Lucca"},
+          {"tech": "Water II", "user": "Frog"}
+        ],
+        "MPcost": { "Crono": 8, "Lucca": 8, "Frog": 8 },
+        "target": "All enemies",
+        "description": "Igual que Delta Force pero con Frog en lugar de Marle: combina Rayo + Fuego + Agua para atacar a todos los enemigos con daño de sombra."
+      },
+      {
+        "name": "Gatling Kick",
+        "characters": ["Crono", "Lucca", "Ayla"],
+        "prerequisites": [
+          {"tech": "Lightning II", "user": "Crono"},
+          {"tech": "Fire II", "user": "Lucca"},
+          {"tech": "Triple Kick", "user": "Ayla"}
+        ],
+        "MPcost": { "Crono": 8, "Lucca": 8, "Ayla": 20 },
+        "target": "One enemy",
+        "description": "Ayla realiza un combo de patadas veloces imbuido con el poder del rayo de Crono y el fuego de Lucca, enfocado en un solo enemigo (daño Shadow combinado)."
+      },
+      {
+        "name": "Triple Attack (Triple Raid)",
+        "characters": ["Crono", "Robo", "Frog"],
+        "prerequisites": [
+          {"tech": "Cyclone", "user": "Crono"},
+          {"tech": "Slurp Slash", "user": "Frog"},
+          {"tech": "Robo Tackle", "user": "Robo"}
+        ],
+        "MPcost": { "Crono": 2, "Frog": 2, "Robo": 4 },
+        "target": "One enemy",
+        "description": "Crono, Frog y Robo atacan juntos a un enemigo desde tres direcciones, infligiendo un gran daño físico concentrado."
+      },
+      {
+        "name": "Twister",
+        "characters": ["Crono", "Robo", "Ayla"],
+        "prerequisites": [
+          {"tech": "Cyclone", "user": "Crono"},
+          {"tech": "Laser Spin", "user": "Robo"},
+          {"tech": "Tail Spin", "user": "Ayla"}
+        ],
+        "MPcost": { "Crono": 2, "Robo": 3, "Ayla": 10 },
+        "target": "All enemies",
+        "description": "Genera un enorme tornado (combinando viento, láser y fuerza física) que golpea a todos los enemigos con daño de sombra."
+      },
+      {
+        "name": "3-D Attack (3D Attack)",
+        "characters": ["Crono", "Frog", "Ayla"],
+        "prerequisites": [
+          {"tech": "Cyclone", "user": "Crono"},
+          {"tech": "Slurp Slash", "user": "Frog"},
+          {"tech": "Triple Kick", "user": "Ayla"}
+        ],
+        "MPcost": { "Crono": 2, "Frog": 2, "Ayla": 20 },
+        "target": "One enemy",
+        "description": "Ataque triple donde Crono, Frog y Ayla golpean simultáneamente a un enemigo desde distintas posiciones (ataque físico muy potente a un objetivo)."
+      },
+      {
+        "name": "Eternal Darkness (Dark Eternal)",
+        "characters": ["Magus", "Marle", "Lucca"],
+        "prerequisites": [
+          {"tech": "Dark Matter", "user": "Magus"},
+          {"tech": "Ice II", "user": "Marle"},
+          {"tech": "Fire II", "user": "Lucca"}
+        ],
+        "MPcost": { "Magus": 20, "Marle": 8, "Lucca": 8 },
+        "itemRequired": "Black Gemstone",
+        "target": "All enemies",
+        "description": "Magus, Marle y Lucca combinan sus poderes para invocar una oscuridad absoluta que daña a todos los enemigos (requiere equipar el ítem especial \"Black Gemstone\")."
+      },
+      {
+        "name": "Omega Flare",
+        "characters": ["Lucca", "Robo", "Magus"],
+        "prerequisites": [
+          {"tech": "Flare", "user": "Lucca"},
+          {"tech": "Laser Spin", "user": "Robo"},
+          {"tech": "Dark Bomb", "user": "Magus"}
+        ],
+        "MPcost": { "Lucca": 20, "Robo": 3, "Magus": 8 },
+        "itemRequired": "Blue Gemstone",
+        "target": "All enemies",
+        "description": "Combina el láser de Robo amplificado por Flare de Lucca y magia oscura de Magus para disparar un rayo devastador a todos los enemigos (requiere equipar \"Blue Gemstone\")."
+      },
+      {
+        "name": "Spin Strike",
+        "characters": ["Frog", "Robo", "Ayla"],
+        "prerequisites": [
+          {"tech": "Slurp Slash", "user": "Frog"},
+          {"tech": "Robo Tackle", "user": "Robo"},
+          {"tech": "Tail Spin", "user": "Ayla"}
+        ],
+        "MPcost": { "Frog": 4, "Robo": 4, "Ayla": 10 },
+        "itemRequired": "Silver Gemstone",
+        "target": "One enemy",
+        "description": "Ataque triple donde Frog y Robo impulsan a Ayla en un salto giratorio que golpea violentamente a un enemigo (requiere equipar \"Silver Gemstone\")."
+      },
+      {
+        "name": "Poyozo Dance",
+        "characters": ["Marle", "Lucca", "Ayla"],
+        "prerequisites": [
+          {"tech": "Allure", "user": "Marle"},
+          {"tech": "Hypnowave", "user": "Lucca"},
+          {"tech": "Triple Kick", "user": "Ayla"}
+        ],
+        "MPcost": { "Marle": 1, "Lucca": 1, "Ayla": 10 },
+        "itemRequired": "White Gemstone",
+        "target": "All enemies",
+        "description": "Las chicas realizan un baile extraño que confunde a todos los enemigos y provoca daño mágico desconocido (requiere equipar \"White Gemstone\")."
+      },
+      {
+        "name": "Master Mune (Grand Dream)",
+        "characters": ["Frog", "Robo", "Marle"],
+        "prerequisites": [
+          {"tech": "Frog Squash", "user": "Frog"},
+          {"tech": "Laser Spin", "user": "Robo"},
+          {"tech": "Arise (Life2)", "user": "Marle"}
+        ],
+        "MPcost": { "Frog": 15, "Robo": 3, "Marle": 15 },
+        "itemRequired": "Golden Gemstone",
+        "target": "All enemies",
+        "description": "Invoca a Masa y Mune (espíritus de la espada Masamune) para golpear a todos los enemigos con una poderosa energía, combinando el poder de Frog, Robo y Marle (requiere equipar \"Golden Gemstone\")."
+      }
+      ]
+    }
+  }
+]

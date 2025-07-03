@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Music Notes",
+    "used_by": "Cybot",
+    "poem": "The spotlight comes on, and Cybot sings you a song.",
+    "effect": "Confuses all characters."
+  },
+  {
+    "name": "10,000 Hz Scouter",
+    "used_by": "Rings of sound surround!",
+    "poem": "",
+    "effect": "Puts 1 character to sleep."
+  },
+  {
+    "name": "Absorb",
+    "used_by": "Flyclops",
+    "poem": "Balls of energy sneak away MP.",
+    "effect": "Absorbs (about) 10% of a character's max MP."
+  },
+  {
+    "name": "Active Life",
+    "used_by": "Lavos Core (right bit)",
+    "poem": "When you think you will win, the tables will turn, enemies can come back, a lesson you must learn.",
+    "effect": "Revives any dead bits."
+  },
+  {
+    "name": "Amplifire",
+    "used_by": "Bit/Guardian",
+    "poem": "Pink ray of light (to Guardian's delight).",
+    "effect": "Shadow damage to 1 character."
+  },
+  {
+    "name": "Area Bomb",
+    "used_by": "Atropos XR",
+    "poem": "Atropos explodes, and Robo's HP erodes.",
+    "effect": "Fire damage to 1 character."
+  },
+  {
+    "name": "Arm Attack",
+    "used_by": "Giga Gaia (right hand)",
+    "poem": "You'll be grabbed by the hand, and your body will be slammed.",
+    "effect": "Cuts 1 character's HP in half."
+  },
+  {
+    "name": "Azala Break",
+    "used_by": "Azala",
+    "poem": "The ground will surely quake, with Azala's famed Azala Break.",
+    "effect": "Physical damage and causes HP to steadily drop for all characters."
+  },
+  {
+    "name": "Bad Impulse",
+    "used_by": "Flea Plus (with Great Ozzie and Super Slash)",
+    "poem": "Slash will jump off Ozzie's head, and deliver a fire attack that you'll dread.",
+    "effect": "Fire damage to 1 character."
+  },
+  {
+    "name": "Barrier Change",
+    "used_by": "Magus",
+    "poem": "Magus will change his weakness, it's true, so you'll have to change your attack too.",
+    "effect": "Magus changes his weakness to the same element as his last magic attack."
+  }
+  /* ...continúa con el resto de ataques siguiendo la misma estructura... */
+]

@@ -1,0 +1,226 @@
+[
+  {
+    "Name": "Hide Tunic",
+    "Buy": "-",
+    "Sell": "40",
+    "Def": "5",
+    "Effect": "-"
+  },
+  {
+    "Name": "Karate Gi",
+    "Buy": "300",
+    "Sell": "150",
+    "Def": "10",
+    "Effect": "-"
+  },
+  {
+    "Name": "BronzeMail",
+    "Buy": "520",
+    "Sell": "260",
+    "Def": "16",
+    "Effect": "-"
+  },
+  {
+    "Name": "MaidenSuit",
+    "Buy": "560",
+    "Sell": "280",
+    "Def": "18",
+    "Effect": "-"
+  },
+  {
+    "Name": "Iron Suit",
+    "Buy": "800",
+    "Sell": "400",
+    "Def": "25",
+    "Effect": "-"
+  },
+  {
+    "Name": "Titan Vest",
+    "Buy": "1200",
+    "Sell": "600",
+    "Def": "32",
+    "Effect": "-"
+  },
+  {
+    "Name": "Taban Vest",
+    "Buy": "-",
+    "Sell": "-",
+    "Def": "33",
+    "Effect": "Speed+2, Fire damage reduced by 50%"
+  },
+  {
+    "Name": "Gold Suit",
+    "Buy": "1300",
+    "Sell": "650",
+    "Def": "39",
+    "Effect": "-"
+  },
+  {
+    "Name": "Ruby Vest",
+    "Buy": "N+F*",
+    "Sell": "1800",
+    "Def": "45",
+    "Effect": "Fire damage reduced by 50%"
+  },
+  {
+    "Name": "White Vest",
+    "Buy": "-",
+    "Sell": "2900",
+    "Def": "45",
+    "Effect": "Lightning damage absorbed by 50%"
+  },
+  {
+    "Name": "Black Vest",
+    "Buy": "-",
+    "Sell": "2900",
+    "Def": "45",
+    "Effect": "Shadow damage absorbed by 50%"
+  },
+  {
+    "Name": "Blue Vest",
+    "Buy": "-",
+    "Sell": "2900",
+    "Def": "45",
+    "Effect": "Water damage absorbed by 50%"
+  },
+  {
+    "Name": "Red Vest",
+    "Buy": "-",
+    "Sell": "2900",
+    "Def": "45",
+    "Effect": "Fire damage absorbed by 50%"
+  },
+  {
+    "Name": "Dark Mail",
+    "Buy": "-",
+    "Sell": "1900",
+    "Def": "45",
+    "Effect": "Magic Defense +5"
+  },
+  {
+    "Name": "Meso Mail",
+    "Buy": "-",
+    "Sell": "3000",
+    "Def": "52",
+    "Effect": "-"
+  },
+  {
+    "Name": "Mist Robe",
+    "Buy": "-",
+    "Sell": "3400",
+    "Def": "54",
+    "Effect": "-"
+  },
+  {
+    "Name": "Lumin Robe",
+    "Buy": "6500",
+    "Sell": "3250",
+    "Def": "63",
+    "Effect": "Magic Defense +5"
+  },
+  {
+    "Name": "Flash Mail",
+    "Buy": "8500",
+    "Sell": "4250",
+    "Def": "64",
+    "Effect": "-"
+  },
+  {
+    "Name": "White Mail",
+    "Buy": "-",
+    "Sell": "4100",
+    "Def": "70",
+    "Effect": "Absorbs Lightning magic"
+  },
+  {
+    "Name": "Black Mail",
+    "Buy": "-",
+    "Sell": "4100",
+    "Def": "70",
+    "Effect": "Absorbs Shadow magic"
+  },
+  {
+    "Name": "Blue Mail",
+    "Buy": "-",
+    "Sell": "4100",
+    "Def": "70",
+    "Effect": "Absorbs Water magic"
+  },
+  {
+    "Name": "Red Mail",
+    "Buy": "-",
+    "Sell": "4100",
+    "Def": "70",
+    "Effect": "Absorbs Fire magic"
+  },
+  {
+    "Name": "Lode Vest",
+    "Buy": "8500",
+    "Sell": "4250",
+    "Def": "71",
+    "Effect": "-"
+  },
+  {
+    "Name": "Aeon Suit",
+    "Buy": "9000",
+    "Sell": "4500",
+    "Def": "75",
+    "Effect": "-"
+  },
+  {
+    "Name": "RavenArmor",
+    "Buy": "-",
+    "Sell": "7900",
+    "Def": "76",
+    "Effect": "-"
+  },
+  {
+    "Name": "Ruby Armor",
+    "Buy": "**",
+    "Sell": "7000",
+    "Def": "78",
+    "Effect": "Fire damage reduced by 80%"
+  },
+  {
+    "Name": "Taban Suit",
+    "Buy": "-",
+    "Sell": "-",
+    "Def": "79",
+    "Effect": "Speed+3, Fire damage reduced by 80%"
+  },
+  {
+    "Name": "ZodiacCape",
+    "Buy": "-",
+    "Sell": "5000",
+    "Def": "80",
+    "Effect": "Magic Defense +10"
+  },
+  {
+    "Name": "Nova Armor",
+    "Buy": "-",
+    "Sell": "5500",
+    "Def": "82",
+    "Effect": "Protects status"
+  },
+  {
+    "Name": "Gloom Cape",
+    "Buy": "-",
+    "Sell": "8200",
+    "Def": "84",
+    "Effect": "-"
+  },
+  {
+    "Name": "Moon Armor",
+    "Buy": "-",
+    "Sell": "6500",
+    "Def": "85",
+    "Effect": "Magic Defense +10"
+  },
+  {
+    "Name": "PrismDress",
+    "Buy": "-",
+    "Sell": "4400",
+    "Def": "99",
+    "Effect": "Cuts Magic Attacks by 1/3"
+  }
+]

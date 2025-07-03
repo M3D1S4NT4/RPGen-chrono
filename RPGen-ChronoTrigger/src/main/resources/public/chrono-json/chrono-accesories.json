@@ -1,0 +1,218 @@
+[
+  {
+    "Name": "Bandana",
+    "Buy": "-",
+    "Sell": "25",
+    "Effect": "Stamina +1"
+  },
+  {
+    "Name": "Ribbon",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Hit +2"
+  },
+  {
+    "Name": "PowerGlove",
+    "Buy": "-",
+    "Sell": "1000",
+    "Effect": "Power +2"
+  },
+  {
+    "Name": "Defender",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Stamina +2"
+  },
+  {
+    "Name": "Magic Scarf",
+    "Buy": "4500",
+    "Sell": "2250",
+    "Effect": "Magic +2"
+  },
+  {
+    "Name": "Amulet",
+    "Buy": "-",
+    "Sell": "3500",
+    "Effect": "Prevents status changes"
+  },
+  {
+    "Name": "Dash Ring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Speed +3"
+  },
+  {
+    "Name": "Hit Ring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Hit +10"
+  },
+  {
+    "Name": "Power Ring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Power +4"
+  },
+  {
+    "Name": "Magic Ring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Magic +6"
+  },
+  {
+    "Name": "Wall Ring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Magic Defense +10"
+  },
+  {
+    "Name": "SilverErring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Max HP up 25%"
+  },
+  {
+    "Name": "Gold Erring",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Max HP up 50%"
+  },
+  {
+    "Name": "SilverStud",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "MP use cut by 50%"
+  },
+  {
+    "Name": "Gold Stud",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "MP use cut by 75%"
+  },
+  {
+    "Name": "SightScope",
+    "Buy": "-",
+    "Sell": "5000",
+    "Effect": "See enemy HP"
+  },
+  {
+    "Name": "Charm Top",
+    "Buy": "-",
+    "Sell": "10000",
+    "Effect": "Ups Charm odds"
+  },
+  {
+    "Name": "Rage Band",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Counterattacks with 50% chance"
+  },
+  {
+    "Name": "FrenzyBand",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Attack up 80%, but only attack"
+  },
+  {
+    "Name": "Third Eye",
+    "Buy": "-",
+    "Sell": "25000",
+    "Effect": "Evade x2"
+  },
+  {
+    "Name": "Wallet",
+    "Buy": "-",
+    "Sell": "25000",
+    "Effect": "Gain G instead of EXP"
+  },
+  {
+    "Name": "GreenDream",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "1-time auto-revive"
+  },
+  {
+    "Name": "PrismSpecs",
+    "Buy": "-",
+    "Sell": "30000",
+    "Effect": "Attack power up"
+  },
+  {
+    "Name": "Sun Shades",
+    "Buy": "-",
+    "Sell": "30000",
+    "Effect": "Attack power up"
+  },
+  {
+    "Name": "Hero Medal",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Ups critical hit rate of Masamune"
+  },
+  {
+    "Name": "MuscleRing",
+    "Buy": "-",
+    "Sell": "4000",
+    "Effect": "Power +6"
+  },
+  {
+    "Name": "Flea Vest",
+    "Buy": "-",
+    "Sell": "2500",
+    "Effect": "Magic Defense +12"
+  },
+  {
+    "Name": "Magic Seal",
+    "Buy": "-",
+    "Sell": "2500",
+    "Effect": "Magic +5, MDef +5"
+  },
+  {
+    "Name": "Power Seal",
+    "Buy": "-",
+    "Sell": "3000",
+    "Effect": "Power +10, Stam +10"
+  },
+  {
+    "Name": "Sun Stone",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Restores HP during battle, ups attack power"
+  },
+  {
+    "Name": "Speed Belt",
+    "Buy": "-",
+    "Sell": "6000",
+    "Effect": "Speed +2"
+  },
+  {
+    "Name": "Black Rock",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Use DarkEternal Triple Tech"
+  },
+  {
+    "Name": "Blue Rock",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Use OmegaFlare Triple Tech"
+  },
+  {
+    "Name": "Silver Rock",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Use SpinStrike Triple Tech"
+  },
+  {
+    "Name": "White Rock",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Use PoyozoDnce Triple Tech"
+  },
+  {
+    "Name": "Gold Rock",
+    "Buy": "-",
+    "Sell": "-",
+    "Effect": "Use GrandDream Triple Tech"
+  }
+]

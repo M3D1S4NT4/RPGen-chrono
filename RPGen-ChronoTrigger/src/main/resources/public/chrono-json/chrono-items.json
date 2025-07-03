@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Barrier",
+    "buy": null,
+    "sell": 2500,
+    "effect": "Reduces magic damage by 1/3."
+  },
+  {
+    "name": "Elixir",
+    "buy": null,
+    "sell": 10000,
+    "effect": "Restores all HP/MP."
+  },
+  {
+    "name": "Ether",
+    "buy": 800,
+    "sell": 400,
+    "effect": "Restores 10 MP."
+  },
+  {
+    "name": "Fang",
+    "buy": null,
+    "sell": null,
+    "effect": "Trade for items in Ioka Hut."
+  },
+  {
+    "name": "Feather",
+    "buy": null,
+    "sell": null,
+    "effect": "Trade for items in Ioka Hut."
+  },
+  {
+    "name": "Full Ether",
+    "buy": 6000,
+    "sell": 3000,
+    "effect": "Restores 60 MP."
+  },
+  {
+    "name": "Full Tonic",
+    "buy": 700,
+    "sell": 350,
+    "effect": "Restores 500 HP."
+  },
+  {
+    "name": "Heal",
+    "buy": 10,
+    "sell": 5,
+    "effect": "Restores status."
+  },
+  {
+    "name": "Horn",
+    "buy": null,
+    "sell": null,
+    "effect": "Trade for items in Ioka Hut."
+  },
+  {
+    "name": "Hyper Ether",
+    "buy": 10000,
+    "sell": 5000,
+    "effect": "Restores all MP."
+  },
+  {
+    "name": "Jerky",
+    "buy": 9900,
+    "sell": 10000,
+    "effect": "Allows access to the Zenan Bridge and Moon Stone."
+  },
+  {
+    "name": "Lapis",
+    "buy": null,
+    "sell": 250,
+    "effect": "Restores 200 HP to all allies."
+  },
+  {
+    "name": "Magic Tab",
+    "buy": null,
+    "sell": 5,
+    "effect": "Permanently adds one point to Magic stat."
+  },
+  {
+    "name": "MegaElixir",
+    "buy": null,
+    "sell": 25000,
+    "effect": "Restores all HP/MP for all allies."
+  },
+  {
+    "name": "Mid Ether",
+    "buy": 2000,
+    "sell": 1000,
+    "effect": "Restores 30 MP."
+  },
+  {
+    "name": "Mid Tonic",
+    "buy": 100,
+    "sell": 50,
+    "effect": "Restores 200 HP."
+  },
+  {
+    "name": "Petal",
+    "buy": null,
+    "sell": null,
+    "effect": "Trade for items in Ioka Hut."
+  },
+  {
+    "name": "Power Meal",
+    "buy": null,
+    "sell": 1,
+    "effect": "Acts as random recovery item."
+  },
+  {
+    "name": "Power Tab",
+    "buy": null,
+    "sell": 5,
+    "effect": "Permanently adds one point to Power stat."
+  },
+  {
+    "name": "Revive",
+    "buy": 200,
+    "sell": 100,
+    "effect": "Revives ally to 50 HP."
+  },
+  {
+    "name": "Shelter",
+    "buy": 150,
+    "sell": 75,
+    "effect": "Restores all HP/MP for all allies at a Save Point."
+  },
+  {
+    "name": "Shield",
+    "buy": null,
+    "sell": 2500,
+    "effect": "Reduces physical damage by 1/3."
+  },
+  {
+    "name": "Speed Tab",
+    "buy": null,
+    "sell": 5,
+    "effect": "Permanently adds one point to Speed stat."
+  },
+  {
+    "name": "Tonic",
+    "buy": 10,
+    "sell": 5,
+    "effect": "Restores 50 HP."
+  }
+]

@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Combate - Chrono Trigger</title>
+    <style>
+        body { background: #f0f0f0 !important; color: #222; font-family: Arial, sans-serif; margin: 2em; padding-top: 70px !important; }
+        body.dark-mode { background: #181818 !important; color: #fff !important; }
+        body.dark-mode .battle-container { background: #181818 !important; }
+        body.dark-mode .team-panel { background: #232323 !important; color: #f0f0f0 !important; }
+        body.dark-mode .entity-card { background: #2d2d2d !important; color: #f0f0f0 !important; }
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode label,
+        body.dark-mode .stat-label {
+            color: #f0f0f0 !important;
+        }
+        h1 { color: #222; }
+        .battle-container {
+            display: flex;
+            flex-direction: row;
+            gap: 2em;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .team-panel {
+            flex: 0 0 320px;
+            max-width: 340px;
+            min-width: 260px;
+        }
+        .central-panel {
+            flex: 2 1 0%;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #0006;
+            min-height: 500px;
+            max-width: 900px;
+            margin: 0 1em;
+            overflow: hidden;
+        }
+        body.dark-mode .central-panel {
+            background: #232323;
+        }
+        .actions-col {
+            flex: 0 0 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 2em 1em 2em 2em;
+            align-items: stretch;
+            justify-content: flex-start;
+            min-width: 220px;
+            max-width: 320px;
+        }
+        .battle-history-panel {
+            flex: 1 1 0%;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 2em 2em 2em 1em;
+            min-width: 320px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+        }
+        body.dark-mode .battle-history-panel {
+            background: none;
+        }
+        .actions-col button, .actions-panel button, .main-action-btn {
+            font-size: 1.3em;
+            padding: 1.2em 0;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            color: #222;
+            font-weight: bold;
+            border: none;
+            margin: 0.5em 0;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+        .actions-panel button:hover, .actions-col button:hover, .main-action-btn:hover {
+            background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+            transform: scale(1.05);
+        }
+        body.dark-mode .actions-panel button, body.dark-mode .actions-col button, body.dark-mode .main-action-btn {
+            background: linear-gradient(90deg, #232b23 0%, #38f9d7 100%);
+            color: #fff;
+        }
+        .central-panel > *:first-child { border-bottom: 1.5px solid #3333; }
+        body.dark-mode .central-panel > *:first-child { border-bottom: 1.5px solid #444; }
+        .team-panel { background: #fff; color: #222; border-radius: 12px; box-shadow: 0 2px 8px #0006; padding: 1em; width: 340px; min-height: 400px; display: flex; flex-direction: column; }
+        .team-panel h2 { margin-top: 0; color: #222; }
+        .entity-list { display: flex; flex-direction: column; gap: 1em; margin: 0; padding: 0; list-style: none; flex: 1; }
+        .entity-card {
+            background: #f9f9f9; color: #222; border-radius: 10px; box-shadow: 0 1px 4px #0004; padding: 1em; display: flex; align-items: center; gap: 1em; position: relative; overflow: hidden; min-height: 60px; transition: box-shadow 0.2s, background 0.2s, min-height 0.3s, max-height 0.3s;
+        }
+        .entity-card.expanded { background: #e8f5e9; min-height: 250px; }
+        .entity-card .stats { opacity: 0; max-height: 0; transition: opacity 0.2s, max-height 0.3s; overflow: hidden; }
+        .entity-card.expanded .stats { opacity: 1; max-height: 200px; margin-top: 0.5em; }
+        .entity-card .img { width: 48px; height: 48px; border-radius: 6px; background: #111; object-fit: cover; }
+        .entity-card .info { flex: 1; }
+        .entity-card .name { font-weight: bold; font-size: 1.1em; }
+        .entity-card .hp { color: #4caf50; font-weight: bold; }
+        .entity-card .mp { color: #2196f3; font-weight: bold; }
+        .entity-card .stat-row { font-size: 0.95em; color: #333; }
+        .actions-panel { background: #fff; color: #222; border-radius: 10px; padding: 1em; display: flex; gap: 1em; justify-content: center; box-shadow: 0 1px 4px #0004; }
+        .actions-panel button { padding: 0.7em 1.5em; border-radius: 8px; border: none; background: #4CAF50; color: white; font-weight: bold; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+        .actions-panel button:disabled { background: #888; cursor: not-allowed; }
+        .entity-card.selected, .entity-card.can-act { background: #e8f5e9; }
+        .entity-card.defeated {
+            opacity: 0.5;
+            filter: grayscale(0.7);
+            pointer-events: none;
+            cursor: not-allowed !important;
+        }
+        .attacking {
+            animation: attack 1s ease-in-out;
+        }
+        .taking-damage {
+            animation: take-damage 0.5s ease-in-out;
+        }
+        .move-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.2em;
+            z-index: 1000;
+        }
+        @keyframes attack {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(50px); }
+            50% { transform: translateX(0); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes take-damage {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        .winner-announcement {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s ease-out;
+        }
+        .winner-announcement.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        .winner-announcement h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+        .winner-announcement p {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0;
+            z-index: 999;
+        }
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        .tech-item {
+            background: #fff;
+            border-radius: 8px;
+            border: 1.5px solid #4caf50;
+            padding: 1em;
+            margin-bottom: 0.7em;
+            box-shadow: 0 1px 4px #0004;
+            color: #222;
+            font-size: 1em;
+        }
+        body.dark-mode .tech-item {
+            background: #232b23 !important;
+            color: #f0f0f0 !important;
+        }
+        .techs-panel h4 {
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+        }
+        .techs-panel {
+            background: #fff;
+            color: #222;
+        }
+        #techs-list, #items-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1em;
+        }
+        @media (max-width: 1200px) {
+            .battle-container { flex-direction: column; }
+            .battle-history-panel { max-width: 100%; min-width: 0; margin: 1em 0; }
+            .actions-col { max-width: 100%; min-width: 0; }
+            .left-panel { min-width: 0; }
+        }
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #222;
+            color: #fff;
+            z-index: 10000;
+            box-shadow: 0 2px 8px #0002;
+        }
+        .main-header nav {
+            display: flex;
+            justify-content: center;
+            gap: 2em;
+            padding: 1em 0;
+        }
+        .main-header a, .main-header .theme-toggle {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.2s, background 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 0.5em;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .main-header a:hover, .main-header .theme-toggle:hover {
+            color: #4CAF50;
+            background: none;
+        }
+        body.dark-mode .main-header a, body.dark-mode .main-header .theme-toggle {
+            color: #f0f0f0;
+        }
+        body.dark-mode .main-header a:hover, body.dark-mode .main-header .theme-toggle:hover {
+            color: #6fcf97;
+        }
+        body.dark-mode .actions-col, body.dark-mode .actions-panel { background: #232323; color: #f0f0f0; }
+        body.dark-mode .battle-history-panel { background: #232323; color: #f0f0f0; }
+        body.dark-mode button { background-color: #666; color: #fff; }
+        body.dark-mode button:hover { background-color: #777; }
+        .battle-panel {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            min-width: 420px;
+            max-width: 700px;
+        }
+        .battle-messages {
+            background: #fff;
+            border-radius: 10px;
+            min-height: 100px;
+            padding: 1.2em;
+            margin-top: 1.2em;
+            font-size: 1.15em;
+            box-shadow: 0 1px 4px #0004;
+            max-height: 180px;
+            overflow-y: auto;
+            color: #222;
+            display: block;
+        }
+        .main-battle-btn {
+            font-size: 1.2em;
+            padding: 0.9em 2.2em;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            color: #222;
+            font-weight: bold;
+            border: none;
+            margin: 0 0.5em;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+        .main-battle-btn:hover {
+            background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+            transform: scale(1.05);
+        }
+        .entity-card.selected {
+            border: 2.5px solid #4caf50 !important;
+            box-shadow: 0 0 12px #4caf50 !important;
+            z-index: 2;
+        }
+        .entity-card.selected .name {
+            color: #4caf50 !important;
+        }
+        .techs-panel h3,
+        .techs-panel h4, .green-text {
+            color: #4caf50 !important;
+        }
+        body.dark-mode .techs-panel {
+            background: #232b23 !important;
+            color: #fff !important;
+        }
+        .entity-card, .entity-card .stat-row, .entity-card .name {
+            color: #222 !important;
+        }
+        .entity-card .stat-row {
+            color: #333 !important;
+        }
+        body.dark-mode .entity-card, body.dark-mode .entity-card .stat-row, body.dark-mode .entity-card .name {
+            color: #f0f0f0 !important;
+        }
+        .battle-messages {
+            background: #fff;
+            color: #222;
+        }
+        body.dark-mode .battle-messages {
+            background: #222 !important;
+            color: #fff !important;
+        }
+        .techs-panel {
+            background: #fff !important;
+            color: #222;
+        }
+        body.dark-mode .techs-panel {
+            background: #232b23 !important;
+            color: #fff !important;
+        }
+        .tech-item.selected {
+            background: #4caf50 !important;
+            color: #fff !important;
+            border: 2px solid #2196f3;
+            transform: scale(1.03);
+        }
+        .entity-card.can-act {
+            /*border: 2.5px solid #2196f3 !important;*/
+            box-shadow: 0 0 12px #2196f3 !important;
+        }
+        .entity-card.selected.can-act {
+            border: 2.5px solid #43e97b !important;
+            box-shadow: 0 0 16px #43e97b, 0 0 8px #2196f3 !important;
+        }
+        .atb-circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .atb-border-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .atb-border {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            viewBox: "0 0 300 80";
+        }
+        /* --- NUEVO: Barra vertical ATB --- */
+        .atb-bar-vertical {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: #222a;
+            border-radius: 6px 0 0 6px;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .atb-bar-fill {
+            width: 100%;
+            background: #2196f3;
+            height: 0%;
+            transition: height 0.2s;
+            border-radius: 6px 0 0 6px;
+        }
+        body.dark-mode .atb-bar-vertical {
+            background: #444a;
+        }
+        body.dark-mode .atb-bar-fill {
+            background: #38f9d7;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="pokemon.html">Pokédex</a>
+            <a href="battle.html">Combate Pokémon</a>
+            <a href="chrono-team.html">Selección de Equipos Chrono</a>
+            <a href="chrono-battle.html">Combate Chrono Trigger</a>
+            <button class="theme-toggle" onclick="toggleDarkMode()">Cambiar Tema</button>
+        </nav>
+    </header>
+    <h1>Combate</h1>
+    <div id="winnerAnnouncement" class="winner-announcement">
+        <h2>¡Batalla Finalizada!</h2>
+        <p id="winnerText"></p>
+    </div>
+    <div style="margin-bottom:1em; text-align:center;">
+        <button class="main-battle-btn" onclick="startBattle()">Comenzar combate</button>
+        <button class="main-battle-btn" onclick="resetBattle()">Resetear combate</button>
+    </div>
+    <div class="battle-container">
+        <div class="team-panel" id="allies-panel">
+            <h2>Aliados</h2>
+            <ul class="entity-list" id="allies-list"></ul>
+        </div>
+        <div class="battle-panel">
+            <div class="actions-panel" id="actions-panel">
+                <button class="main-battle-btn" onclick="sendAction('attack')">Atacar</button>
+                <button class="main-battle-btn" onclick="showTechs()">Técnica</button>
+                <button class="main-battle-btn" onclick="showItems()">Objeto</button>
+            </div>
+            <div class="battle-messages" id="battle-messages">
+                ¡El combate ha comenzado!
+            </div>
+            <div class="techs-panel" id="techs-panel" style="display:none; background:#232b23; border-radius:10px; padding:1em; margin-top:1em;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="margin:0;">Técnicas disponibles</h3>
+                    <button class="main-battle-btn" onclick="hideTechs()">Cancelar</button>
+                </div>
+                <div id="techs-list" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5em; margin-top:1.5em;"></div>
+            </div>
+            <div class="techs-panel" id="items-panel" style="display:none; background:#232b23; border-radius:10px; padding:1em; margin-top:1em;">
+                <h3>Objetos disponibles</h3>
+                <button class="main-battle-btn" onclick="hideItems()" style="margin-top:1em;">Cancelar</button>
+                <div id="items-list" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:0.5em;"></div>
+            </div>
+        </div>
+        <div class="team-panel" id="enemies-panel">
+            <h2>Enemigos</h2>
+            <ul class="entity-list" id="enemies-list"></ul>
+        </div>
+    </div>
+    <script>
+    // Inicializar datos de equipo globales por defecto
+    window.equipmentDataGlobal = { weaponsByCharacter: {}, armors: [], helmets: [], accessories: [] };
+
+    // --- Utilidades de imagen (idénticas a chrono-team.html) ---
+    function getCharacterImage(name) {
+        const playable = ['crono','marle','lucca','frog','robo','ayla','magus'];
+        const key = name ? name.toLowerCase() : '';
+        if (playable.includes(key)) {
+            return `https://shrines.rpgclassics.com/snes/ct/images/${key}.gif`;
+        }
+        return null;
+    }
+    // --- Enemy image exceptions y función getEnemyImage (copiado de chrono-team.html) ---
+    const enemyImageExceptions = {
+        // 65000000BC
+        'anion': 'bc65mil/ion.gif',
+        'croaker': 'bc65mil/amphibite.gif',
+        'nizbel ii': 'bc65mil/nizbel2.gif',
+        'rain frog': 'bc65mil/amphibite.gif',
+        'reptite 1': 'bc65mil/reptite.gif',
+        'winged ape': 'bc65mil/wingape.gif',
+        // 12000BC
+        'giga gaia right hand': 'bc12000/gigagaiarh.gif',
+        'giga gaia left hand': 'bc12000/gigagaialh.gif',
+        'lavos': 'ad1999/lavos.gif',
+        'man eater': 'bc12000/maneater.gif',
+        'nu 1': 'bc65mil/nu.gif',
+        'nu 2': 'bc65mil/nu.gif',
+        // 600AD
+        'magus': 'ad600/maguse.gif',
+        'masa&mune': 'ad600/masamune.gif',
+        'nu': 'bc65mil/nu.gif',
+        'omnicrone': 'ad1000/omnicrone.gif',
+        'ozzie 1': 'ad600/ozz.gif',
+        'ozzie 2': 'ad600/ozzie.gif',
+        'ozzie 3': 'ad600/ozzie.gif',
+        'retinite top': 'ad600/retinitet.gif',
+        'retinite core': 'ad600/retinitem.gif',
+        'retinite bottom': 'ad600/retiniteb.gif',
+        'shadow': 'ad2300/shadow.gif',
+        'slash 1': 'ad600/slashns.gif',
+        'slash 2': 'ad600/slashe.gif',
+        'superslash': 'ad600/superslash.gif',
+        'zombor head': 'ad600/zomborh.gif',
+        'zombor bottom': 'ad600/zomborb.gif',
+        // 1000AD
+        'base': 'ad600/base.gif',
+        'defunct': 'ad600/defunct.gif',
+        'departed': 'ad600/departed.gif',
+        'hench 1': 'ad600/hench1.gif',
+        'naga-ette': 'ad600/naga-ette.gif',
+        'reaper': 'ad600/reaper.gif',
+        'sentry': 'ad600/sentry.gif',
+        // 2300AD
+        'laser guard': 'blackomen/laserguard.gif',
+        'lavos spawn head': 'ad2300/lavosspawndp.gif',
+        'lavos spawn shell': 'blackomen/lavosspawns.gif',
+        'son of sun fake flame': 'ad2300/flame.gif',
+        'son of sun real flame': 'ad2300/flame.gif',
+        // Black Omen
+        'giga mutant bottom': 'blackomen/gigamutantb.gif',
+        'giga mutant top': 'blackomen/gigamutantt.gif',
+        'lavos spawn head': 'blackomen/lavosspawnbo.gif',
+        'lavos spawn shell': 'blackomen/lavosspawns.gif',
+        'mammon m': 'blackomen/mammonm.gif',
+        'mega mutant bottom': 'blackomen/megamutantb.gif',
+        'mega mutant top': 'blackomen/megamutantt.gif',
+        'terra mutant bottom': 'blackomen/terramutantb.gif',
+        'terra mutant top': 'blackomen/terramutantt.gif',
+        'zeal 1': 'blackomen/zeal.gif',
+        'zeal 2 head': 'blackomen/zealh.gif',
+        'zeal 2 left hand': 'blackomen/zeallh.gif',
+        'zeal 2 right hand': 'blackomen/zealrh.gif',
+        // Spekkio Forms (en orden)
+        'spekkio': [
+            'blackomen/spekkio1.gif',
+            'blackomen/spekkio2.gif',
+            'blackomen/spekkio3.gif',
+            'blackomen/spekkio4.gif',
+            'blackomen/spekkio5.gif',
+            'blackomen/spekkio6.gif'
+        ],
+        // Lavos Forms
+        'lavos (1)': 'ad1999/lavos.gif',
+        'lavos part (1)': 'ad1999/lavoshelper1.gif',
+        'lavos part (2)': 'ad1999/lavoshelper2.gif',
+        'lavos (2)': 'ad1999/lavos.gif',
+        'lavos (3)': 'ad1999/lavosh.gif',
+        'lavos (3) (left hand)': 'ad1999/lavoslh.gif',
+        'lavos (3) (right hand)': 'ad1999/lavosrh.gif',
+        'lavos core': 'ad1999/lavosc.gif',
+        'lavos core (small bit)': 'ad1999/lavosc.gif',
+        'lavos core (central bit)': 'ad1999/lavosc.gif',
+    };
+
+    function getEnemyImage(name, epoca, idx) {
+        if (!name) return null;
+        const key = name.trim().toLowerCase();
+        // Spekkio: usar el índice para elegir la imagen correcta
+        if (epoca === 'spekkio-forms' && enemyImageExceptions['spekkio']) {
+            const arr = enemyImageExceptions['spekkio'];
+            return `https://shrines.rpgclassics.com/snes/ct/${arr[idx] || arr[0]}`;
+        }
+        if (enemyImageExceptions[key]) {
+            return `https://shrines.rpgclassics.com/snes/ct/${enemyImageExceptions[key]}`;
+        }
+        // Mapear época a carpeta
+        const epocaFolderMap = {
+            '1000AD': 'ad1000',
+            '600AD': 'ad600',
+            '2300AD': 'ad2300',
+            '12000BC': 'bc12000',
+            '65000000BC': 'bc65mil',
+            'BlackOmen': 'blackomen',
+            'lavos-forms': 'lavos',
+            'spekkio-forms': 'blackomen'
+        };
+        const folder = epocaFolderMap[epoca] || 'ad1000';
+        let file = name.toLowerCase().replace(/\s+/g,'').replace(/\?/g,'').replace(/[()]/g,'').replace(/'/g,'');
+        return `https://shrines.rpgclassics.com/snes/ct/${folder}/${file}.gif`;
+    }
+
+    // --- Estado de batalla ---
+    let battleState = null;
+    let initialEntitiesRendered = false;
+    let selectedAllyIdx = null;
+    let selectedEnemyIdx = null;
+    let availableTechs = [];
+    let selectedTech = null;
+
+    // Recuperar datos de equipos y época de localStorage
+    let savedAllies = null;
+    let savedEnemies = null;
+    let savedEpoca = null;
+    try {
+        savedAllies = JSON.parse(localStorage.getItem('chrono_allies'));
+        savedEnemies = JSON.parse(localStorage.getItem('chrono_enemies'));
+        savedEpoca = localStorage.getItem('chrono_epoca');
+    } catch (e) {}
+
+    // --- Utilidad para parsear bonus de stats de un string tipo 'Magic +2, Speed+3' ---
+    function parseStatBonuses(effectStr) {
+        const bonuses = {};
+        if (!effectStr || typeof effectStr !== 'string') return bonuses;
+        const regex = /([A-Za-z ]+)[+ ]([+-]?\d+)/g;
+        let match;
+        while ((match = regex.exec(effectStr)) !== null) {
+            let stat = match[1].trim().replace(/\s+/g, '');
+            let value = parseInt(match[2]);
+            if (!isNaN(value)) {
+                bonuses[stat] = (bonuses[stat] || 0) + value;
+            }
+        }
+        
+        // Buscar efectos especiales
+        const specialEffects = [];
+        if (effectStr.toLowerCase().includes('fire damage reduced by 50%')) {
+            specialEffects.push('Resistencia al fuego 50%');
+        }
+        if (effectStr.toLowerCase().includes('fire damage reduced by 80%')) {
+            specialEffects.push('Resistencia al fuego 80%');
+        }
+        if (effectStr.toLowerCase().includes('fire damage absorbed by 50%')) {
+            specialEffects.push('Absorbe fuego 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs fire magic')) {
+            specialEffects.push('Absorbe magia de fuego');
+        }
+        if (effectStr.toLowerCase().includes('water damage absorbed by 50%')) {
+            specialEffects.push('Absorbe agua 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs water magic')) {
+            specialEffects.push('Absorbe magia de agua');
+        }
+        if (effectStr.toLowerCase().includes('lightning damage absorbed by 50%')) {
+            specialEffects.push('Absorbe rayos 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs lightning magic')) {
+            specialEffects.push('Absorbe magia de rayos');
+        }
+        if (effectStr.toLowerCase().includes('shadow damage absorbed by 50%')) {
+            specialEffects.push('Absorbe sombra 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs shadow magic')) {
+            specialEffects.push('Absorbe magia de sombra');
+        }
+        if (effectStr.toLowerCase().includes('cuts physical damage by 1/3')) {
+            specialEffects.push('Reduce daño físico 33%');
+        }
+        if (effectStr.toLowerCase().includes('cuts magic attacks by 1/3')) {
+            specialEffects.push('Reduce daño mágico 33%');
+        }
+        if (effectStr.toLowerCase().includes('protects status')) {
+            specialEffects.push('Protege de estados');
+        }
+        if (effectStr.toLowerCase().includes('prevents "chaos" status effect')) {
+            specialEffects.push('Inmune a Caos');
+        }
+        if (effectStr.toLowerCase().includes('prevents "lock" status effect')) {
+            specialEffects.push('Inmune a Bloqueo');
+        }
+        if (effectStr.toLowerCase().includes('prevents "stop" and "slow" status effects')) {
+            specialEffects.push('Inmune a Parar/Lentitud');
+        }
+        if (effectStr.toLowerCase().includes('counterattacks with 50% chance')) {
+            specialEffects.push('Contraataque 50%');
+        }
+        if (effectStr.toLowerCase().includes('attack up 80%, but only attack')) {
+            specialEffects.push('Ataque +80% (solo atacar)');
+        }
+        if (effectStr.toLowerCase().includes('1-time auto-revive')) {
+            specialEffects.push('Auto-revive (1 uso)');
+        }
+        if (effectStr.toLowerCase().includes('mp use cut by 50%')) {
+            specialEffects.push('MP -50%');
+        }
+        if (effectStr.toLowerCase().includes('mp use cut by 75%')) {
+            specialEffects.push('MP -75%');
+        }
+        if (effectStr.toLowerCase().includes('max hp up 25%')) {
+            specialEffects.push('HP máximo +25%');
+        }
+        if (effectStr.toLowerCase().includes('max hp up 50%')) {
+            specialEffects.push('HP máximo +50%');
+        }
+        if (effectStr.toLowerCase().includes('increases speed by 50%')) {
+            specialEffects.push('Velocidad +50%');
+        }
+        
+        bonuses.specialEffects = specialEffects;
+        return bonuses;
+    }
+
+    function getModifiedStats(baseStats, equipment) {
+        let totalBonuses = {};
+        if (equipment.weaponObj) {
+            if (equipment.weaponObj.attack) {
+                totalBonuses['Attack'] = (totalBonuses['Attack'] || 0) + Number(equipment.weaponObj.attack);
+            }
+            if (equipment.weaponObj.special) {
+                const b = parseStatBonuses(equipment.weaponObj.special);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        if (equipment.armorObj) {
+            if (equipment.armorObj.Def) {
+                totalBonuses['Defense'] = (totalBonuses['Defense'] || 0) + Number(equipment.armorObj.Def);
+            }
+            if (equipment.armorObj.Effect) {
+                const b = parseStatBonuses(equipment.armorObj.Effect);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        if (equipment.helmetObj) {
+            if (equipment.helmetObj.Def) {
+                totalBonuses['Defense'] = (totalBonuses['Defense'] || 0) + Number(equipment.helmetObj.Def);
+            }
+            if (equipment.helmetObj.Effect) {
+                const b = parseStatBonuses(equipment.helmetObj.Effect);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        if (equipment.accessoryObj && equipment.accessoryObj.Effect) {
+            const b = parseStatBonuses(equipment.accessoryObj.Effect);
+            for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+        }
+        const result = {...baseStats};
+        for (const stat in totalBonuses) {
+            let key = stat;
+            if (key.toLowerCase() === 'power') key = 'Strength';
+            if (key.toLowerCase() === 'defense' || key.toLowerCase() === 'def') key = 'Stamina';
+            if (key.toLowerCase() === 'magicdefense' || key.toLowerCase() === 'mdef') key = 'MagicDefense';
+            if (key.toLowerCase() === 'magic') key = 'Magic';
+            if (key.toLowerCase() === 'speed') key = 'Speed';
+            if (key.toLowerCase() === 'hit') key = 'Accuracy';
+            if (key.toLowerCase() === 'stamina') key = 'Stamina';
+            if (key.toLowerCase() === 'evade') key = 'Evasion';
+            result[key] = (result[key] || 0) + totalBonuses[stat];
+        }
+        return { result, totalBonuses };
+    }
+
+    function findEquipmentObj(type, name, equipmentData) {
+        if (!name) return null;
+        if (type === 'weapon') {
+            for (const key in equipmentData.weaponsByCharacter) {
+                const arr = equipmentData.weaponsByCharacter[key];
+                const found = arr.find(w => w.name === name);
+                if (found) return found;
+            }
+        } else if (type === 'armor') {
+            return equipmentData.armors.find(a => a.Name === name);
+        } else if (type === 'helmet') {
+            return equipmentData.helmets.find(h => h.Name === name);
+        } else if (type === 'accessory') {
+            return equipmentData.accessories.find(a => a.Name === name);
+        }
+        return null;
+    }
+
+    // --- Modifica renderEntitiesInitial para aliados ---
+    function renderEntitiesInitial(list, containerId, isAlly) {
+        const ul = document.getElementById(containerId);
+        ul.innerHTML = '';
+        // Si los datos de equipo no están cargados, cargarlos y luego renderizar
+        if (!window.equipmentDataGlobal.weaponsByCharacter || Object.keys(window.equipmentDataGlobal.weaponsByCharacter).length === 0) {
+            Promise.all([
+                fetch('/chrono-json/chrono-weapons.json').then(res => res.json()).then(data => {
+                    if (Array.isArray(data) && data.length > 0) window.equipmentDataGlobal.weaponsByCharacter = data[0].weapons;
+                }),
+                fetch('/chrono-json/chrono-armor.json').then(res => res.json()).then(data => { window.equipmentDataGlobal.armors = data; }),
+                fetch('/chrono-json/chrono-helmets.json').then(res => res.json()).then(data => { window.equipmentDataGlobal.helmets = data; }),
+                fetch('/chrono-json/chrono-accesories.json').then(res => res.json()).then(data => { window.equipmentDataGlobal.accessories = data; })
+            ]).then(() => {
+                renderEntitiesInitial(list, containerId, isAlly);
+            });
+            return;
+        }
+        // Usar siempre battleState para la selección
+        const entities = (battleState && containerId === 'allies-list') ? battleState.allies :
+                         (battleState && containerId === 'enemies-list') ? battleState.enemies : list;
+        const safeEntities = Array.isArray(entities) ? entities : [];
+        safeEntities.forEach((entity, idx) => {
+            const li = document.createElement('li');
+            li.className = 'entity-card';
+            if (!isAlly && entity.hp !== undefined && entity.hp <= 0) {
+                li.classList.add('defeated');
+            }
+            if (isAlly && selectedAllyIdx === idx) {
+                li.classList.add('selected');
+            }
+            if (!isAlly && selectedEnemyIdx === idx) {
+                li.classList.add('selected');
+            }
+            if (isAlly && entity.canAct) {
+                li.classList.add('can-act');
+            }
+            let imgUrl;
+            if (isAlly) {
+                imgUrl = getCharacterImage(entity.name);
+            } else {
+                const epoca = entity.epoca || savedEpoca || (battleState && battleState.epoca) || 'unknown';
+                imgUrl = getEnemyImage(entity.name, epoca, idx);
+            }
+            if (!imgUrl && !isAlly && entity.name) {
+                imgUrl = 'https://shrines.rpgclassics.com/snes/ct/ad1000/unknown.gif';
+            }
+            // Mostrar nombre y nivel si existe
+            let nivel = 0;
+            if (isAlly || (!isAlly && entity)) {
+                if (entity.level !== undefined && entity.level !== null) nivel = entity.level;
+                else if (entity.stats && entity.stats.level !== undefined && entity.stats.level !== null) nivel = entity.stats.level;
+                else if (!isAlly && entity.level === undefined && entity.stats && entity.stats.level === undefined && entity['level'] !== undefined) nivel = entity['level'];
+            }
+            let statsHtml = '';
+            if (isAlly && entity) {
+                // Busca objetos equipados
+                const weaponObj = findEquipmentObj('weapon', entity.weapon, window.equipmentDataGlobal);
+                const armorObj = findEquipmentObj('armor', entity.armor, window.equipmentDataGlobal);
+                const helmetObj = findEquipmentObj('helmet', entity.helmet, window.equipmentDataGlobal);
+                const accessoryObj = findEquipmentObj('accessory', entity.accessory, window.equipmentDataGlobal);
+
+                let statsBlock = '';
+                // Si entity.stats existe y tiene propiedades, úsalo (como antes)
+                let baseStats = entity.stats && Object.keys(entity.stats).length > 0 ? entity.stats : null;
+                if (baseStats) {
+                    // Mostrar todas las stats guardadas
+                    const statMap = [
+                        ['HP', 'HP'], ['MP', 'MP'], ['Strength', 'Fuerza'], ['Stamina', 'Defensa'],
+                        ['Accuracy', 'Precisión'], ['Evasion', 'Evasión'], ['Magic', 'Magia'], ['MagicDefense', 'Def. Mágica'], ['Speed', 'Velocidad']
+                    ];
+                    statMap.forEach(([key, label]) => {
+                        if (baseStats[key] !== undefined) {
+                            statsBlock += `<div class="stat-row"><span class="stat-label">${label}:</span> ${baseStats[key]}</div>`;
+                        }
+                    });
+                } else {
+                    // Si no hay entity.stats, muestra los stats principales igual que para enemigos
+                    const statMap = [
+                        ['hp', 'HP'], ['mp', 'MP'], ['strength', 'Fuerza'], ['stamina', 'Defensa'],
+                        ['accuracy', 'Precisión'], ['evasion', 'Evasión'], ['magic', 'Magia'], ['magicDefense', 'Def. Mágica'], ['speed', 'Velocidad']
+                    ];
+                    statMap.forEach(([key, label]) => {
+                        if (entity[key] !== undefined) {
+                            statsBlock += `<div class="stat-row"><span class="stat-label">${label}:</span> ${entity[key]}</div>`;
+                        }
+                    });
+                }
+                // Mostrar efectos especiales
+                let specialEffects = [];
+                if (weaponObj && weaponObj.special) {
+                    const bonuses = parseStatBonuses(weaponObj.special);
+                    if (bonuses.specialEffects) specialEffects.push(...bonuses.specialEffects);
+                }
+                if (armorObj && armorObj.Effect) {
+                    const bonuses = parseStatBonuses(armorObj.Effect);
+                    if (bonuses.specialEffects) specialEffects.push(...bonuses.specialEffects);
+                }
+                if (helmetObj && helmetObj.Effect) {
+                    const bonuses = parseStatBonuses(helmetObj.Effect);
+                    if (bonuses.specialEffects) specialEffects.push(...bonuses.specialEffects);
+                }
+                if (accessoryObj && accessoryObj.Effect) {
+                    const bonuses = parseStatBonuses(accessoryObj.Effect);
+                    if (bonuses.specialEffects) specialEffects.push(...bonuses.specialEffects);
+                }
+                if (specialEffects.length > 0) {
+                    statsBlock += `<div class="stat-row" style="margin-top: 0.5em; border-top: 1px solid #444; padding-top: 0.5em;"><span class="stat-label">Efectos:</span></div>`;
+                    specialEffects.forEach(effect => {
+                        statsBlock += `<div class="stat-row" style="font-size: 0.9em; color: #b0e0b0; margin-left: 1em;">• ${effect}</div>`;
+                    });
+                }
+                statsHtml = `<div class="stats">${statsBlock}</div>`;
+            } else if (!isAlly && entity) {
+                // Enemigos: mostrar stats principales
+                let statsBlock = '';
+                const statMap = [
+                    ['hp', 'HP'], ['mp', 'MP'], ['attack', 'Ataque'], ['defense', 'Defensa'],
+                    ['magic_power', 'Magia'], ['magic_defense', 'Def. Mágica'], ['speed', 'Velocidad'],
+                    ['exp', 'EXP'], ['gold', 'Oro'], ['tp', 'TP'], ['location', 'Ubicación']
+                ];
+                statMap.forEach(([key, label]) => {
+                    if (entity[key] !== undefined) {
+                        statsBlock += `<div class="stat-row"><span class="stat-label">${label}:</span> ${entity[key]}</div>`;
+                    }
+                });
+                statsHtml = `<div class="stats">${statsBlock}</div>`;
+            }
+            let equipHtml = '';
+            if (isAlly && entity) {
+                if (entity.weapon) equipHtml += `<div>Arma: <b>${entity.weapon}</b></div>`;
+                if (entity.armor) equipHtml += `<div>Armadura: <b>${entity.armor}</b></div>`;
+                if (entity.helmet) equipHtml += `<div>Casco: <b>${entity.helmet}</b></div>`;
+                if (entity.accessory) equipHtml += `<div>Accesorio: <b>${entity.accessory}</b></div>`;
+            }
+            li.innerHTML = `
+                <div class="atb-bar-vertical"><div class="atb-bar-fill"></div></div>
+                <div style="position:relative;display:inline-block;width:48px;height:48px;vertical-align:top;">
+                    <img class="img" src="${imgUrl || ''}" alt="${entity.name}" onerror="this.style.display='none'">
+                </div>
+                <div class="info">
+                    <div class="name">${entity.name}${nivel ? ` <span style='font-size:0.9em;color:#b0e0b0;'>(Nv. ${nivel})</span>` : ''}</div>
+                    ${equipHtml}
+                    ${(() => {
+                        // Si es aliado y hay stats, añade el nivel al bloque de stats si no está
+                        if ((isAlly || !isAlly) && ((entity.stats && Object.keys(entity.stats).length > 0) || nivel)) {
+                            let statsBlock = '';
+                            const statMap = isAlly ? [
+                                ['Strength', 'Fuerza'], ['Stamina', 'Defensa'],
+                                ['Accuracy', 'Precisión'], ['Evasion', 'Evasión'], ['Magic', 'Magia'], ['MagicDefense', 'Def. Mágica'], ['Speed', 'Velocidad']
+                            ] : [
+                                ['hp', 'HP'], ['mp', 'MP'], ['attack', 'Ataque'], ['defense', 'Defensa'],
+                                ['magic_power', 'Magia'], ['magic_defense', 'Def. Mágica'], ['speed', 'Velocidad'],
+                                ['exp', 'EXP'], ['gold', 'Oro'], ['tp', 'TP'], ['location', 'Ubicación']
+                            ];
+                            if (isAlly && entity.stats) {
+                                statMap.forEach(([key, label]) => {
+                                    if (entity.stats[key] !== undefined) {
+                                        statsBlock += `<div class='stat-row'><span class='stat-label'>${label}:</span> ${entity.stats[key]}</div>`;
+                                    }
+                                });
+                            } else if (!isAlly) {
+                                statMap.forEach(([key, label]) => {
+                                    if (entity[key] !== undefined) {
+                                        statsBlock += `<div class='stat-row'><span class='stat-label'>${label}:</span> ${entity[key]}</div>`;
+                                    }
+                                });
+                            }
+                            return `<div class='stats'>${statsBlock}</div>`;
+                        }
+                        return statsHtml;
+                    })()}
+                    <div class="stat-row status">${entity.status ? 'Estado: <span class=\"status-val\">' + entity.status + '</span>' : '<span class=\"status-val\"></span>'}</div>
+                </div>`;
+            if (isAlly) {
+                li.style.cursor = entity.canAct ? 'pointer' : 'default';
+                li.onclick = function() {
+                    if (!entity.canAct) return;
+                    selectedAllyIdx = idx;
+                    renderEntitiesInitial(entities, containerId, isAlly);
+                };
+            } else {
+                if (entity.hp > 0) {
+                    li.style.cursor = 'pointer';
+                    li.onclick = function() {
+                        selectedEnemyIdx = idx;
+                        renderEntitiesInitial(entities, containerId, isAlly);
+                    };
+                } else {
+                    li.style.cursor = 'not-allowed';
+                    li.onclick = null;
+                }
+            }
+            // Añadir hover para expandir stats
+            li.onmouseenter = () => li.classList.add('expanded');
+            li.onmouseleave = () => li.classList.remove('expanded');
+            // --- NUEVO: Actualizar barra ATB vertical ---
+            const atbBar = li.querySelector('.atb-bar-fill');
+            if (atbBar && entity.atb !== undefined && entity.atbMax !== undefined) {
+                const percent = Math.max(0, Math.min(1, entity.atb / entity.atbMax));
+                atbBar.style.height = (percent * 100) + '%';
+                atbBar.style.opacity = percent > 0 ? 1 : 0.5;
+            } else if (atbBar) {
+                atbBar.style.height = '0%';
+                atbBar.style.opacity = 0.5;
+            }
+            ul.appendChild(li);
+        });
+    }
+
+    function updateEntitiesState(list, containerId) {
+        if (!Array.isArray(list)) return;
+        const ul = document.getElementById(containerId);
+        const cards = ul.querySelectorAll('.entity-card');
+        let visibleIdx = 0;
+        list.forEach((entity, idx) => {
+            const card = cards[visibleIdx];
+            if (!card) return;
+            // Actualizar HP
+            let hpRow = card.querySelector('.stat-row.hp');
+            if (!hpRow) {
+                // Si no existe, crearla
+                hpRow = document.createElement('div');
+                hpRow.className = 'stat-row hp';
+                card.querySelector('.info').prepend(hpRow);
+            }
+            hpRow.innerHTML = `HP: <span class="hp-val">${entity.hp}</span>`;
+            // Actualizar MP
+            let mpRow = card.querySelector('.stat-row.mp');
+            if (!mpRow) {
+                mpRow = document.createElement('div');
+                mpRow.className = 'stat-row mp';
+                card.querySelector('.info').insertBefore(mpRow, hpRow.nextSibling);
+            }
+            mpRow.innerHTML = `MP: <span class="mp-val">${entity.mp !== undefined ? entity.mp : '-'}</span>`;
+            // Actualizar estado
+            let statusRow = card.querySelector('.stat-row.status');
+            if (!statusRow) {
+                statusRow = document.createElement('div');
+                statusRow.className = 'stat-row status';
+                card.querySelector('.info').appendChild(statusRow);
+            }
+            statusRow.innerHTML = entity.status ? `Estado: <span class="status-val">${entity.status}</span>` : '<span class="status-val"></span>';
+            // Actualizar clases visuales
+            if (containerId === 'allies-list') {
+                card.classList.toggle('selected', selectedAllyIdx === idx);
+                card.classList.toggle('can-act', !!entity.canAct);
+                card.style.cursor = entity.canAct ? 'pointer' : 'default';
+                card.onclick = function() {
+                    if (!entity.canAct) return;
+                    selectedAllyIdx = idx;
+                    updateEntitiesState(list, containerId);
+                };
+            } else if (containerId === 'enemies-list') {
+                card.classList.toggle('selected', selectedEnemyIdx === idx);
+                card.classList.toggle('defeated', entity.hp !== undefined && entity.hp <= 0);
+                if (entity.hp > 0) {
+                    card.style.cursor = 'pointer';
+                    card.onclick = function() {
+                        selectedEnemyIdx = idx;
+                        updateEntitiesState(list, containerId);
+                    };
+                } else {
+                    card.style.cursor = 'not-allowed';
+                    card.onclick = null;
+                }
+            }
+            card.onmouseenter = () => card.classList.add('expanded');
+            card.onmouseleave = () => card.classList.remove('expanded');
+            visibleIdx++;
+            // Actualizar el círculo ATB
+            const atbRect = card.querySelector('.atb-border rect');
+            if (atbRect && entity.atb !== undefined && entity.atbMax !== undefined) {
+                const w = 296, h = 76;
+                const perim = 2 * (w + h);
+                atbRect.style.strokeDasharray = perim;
+                atbRect.style.strokeDashoffset = perim * (1 - entity.atb/entity.atbMax);
+                atbRect.style.opacity = entity.atb > 0 ? 1 : 0;
+            }
+            // --- NUEVO: Actualizar barra ATB vertical ---
+            const atbBar = card.querySelector('.atb-bar-fill');
+            if (atbBar && entity.atb !== undefined && entity.atbMax !== undefined) {
+                const percent = Math.max(0, Math.min(1, entity.atb / entity.atbMax));
+                atbBar.style.height = (percent * 100) + '%';
+                atbBar.style.opacity = percent > 0 ? 1 : 0.5;
+            } else if (atbBar) {
+                atbBar.style.height = '0%';
+                atbBar.style.opacity = 0.5;
+            }
+        });
+    }
+
+    let fullMessageHistory = [];
+    function renderBattle(state) {
+        updateEntitiesState(state.allies || [], 'allies-list');
+        updateEntitiesState(state.enemies || [], 'enemies-list');
+        const messages = document.getElementById('battle-messages');
+        messages.innerHTML = (state.messages || []).map(m => `<div>${m}</div>`).join('') || '¡El combate ha comenzado!';
+        // Habilitar/deshabilitar acciones según el turno y selección
+        const actions = document.querySelectorAll('.actions-panel button');
+        let canAct = false;
+        if (Array.isArray(state.allies) && selectedAllyIdx !== null && state.allies[selectedAllyIdx]) {
+            canAct = !!state.allies[selectedAllyIdx].canAct;
+        }
+        actions.forEach(btn => btn.disabled = !canAct);
+    }
+
+    function fetchBattleState() {
+        fetch('/api/chrono/battle/status')
+            .then(res => res.json())
+            .then(state => {
+                battleState = state;
+                renderBattle(state);
+            });
+    }
+
+    function sendAction(actionType) {
+        if (!battleState) return;
+        if (selectedAllyIdx === null || !battleState.allies || !battleState.allies[selectedAllyIdx]) {
+            document.getElementById('battle-messages').innerHTML = 'Selecciona un personaje que pueda actuar.';
+            return;
+        }
+        const actor = battleState.allies[selectedAllyIdx];
+        // Usar el nombre exactamente como lo da el backend
+        const actorName = actor && actor.name ? actor.name : '';
+        let move = actionType;
+        if (move === 'Attack' || move === 'attack') move = 'Attack';
+        let target = null;
+        let targetName = '';
+        if (move === 'Defender' || move === 'defend' || move === 'item' || move === 'Objeto') {
+            target = actor;
+            targetName = actorName;
+        } else {
+            if (selectedEnemyIdx === null || !battleState.enemies || !battleState.enemies[selectedEnemyIdx]) {
+                document.getElementById('battle-messages').innerHTML = 'Selecciona un enemigo como objetivo.';
+                return;
+            }
+            target = battleState.enemies[selectedEnemyIdx];
+            targetName = target && target.name ? target.name : '';
+        }
+        fetch('/api/chrono/battle/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ actor: actorName, move, target: targetName })
+        })
+        .then(res => res.json())
+        .then(async state => {
+            if (state.error) {
+                document.getElementById('battle-messages').innerHTML = 'Error al ejecutar la acción: ' + state.error;
+                return;
+            }
+            // Animación de ataque si corresponde
+            if (move === 'Attack' && selectedEnemyIdx !== null) {
+                await animateAttackChrono(selectedAllyIdx, selectedEnemyIdx, true);
+            }
+            battleState = state;
+            selectedAllyIdx = null;
+            selectedEnemyIdx = null;
+            renderBattle(state);
+            // Animación de victoria si corresponde
+            if (state.enemies && state.enemies.every(e => e.hp <= 0)) {
+                showWinnerAnimationChrono('Aliados');
+            } else if (state.allies && state.allies.every(a => a.hp <= 0)) {
+                showWinnerAnimationChrono('Enemigos');
+            }
+        });
+    }
+
+    let pollingInterval = null;
+
+    function startPollingBattle() {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(fetchBattleState, 2000);
+        fetchBattleState();
+    }
+
+    function startBattle() {
+        // Recuperar datos guardados
+        let allies = null;
+        let enemies = null;
+        let epoca = null;
+        try {
+            allies = JSON.parse(localStorage.getItem('chrono_allies'));
+            enemies = JSON.parse(localStorage.getItem('chrono_enemies'));
+            epoca = localStorage.getItem('chrono_epoca');
+        } catch (e) {}
+        if (!allies || !enemies || !epoca) {
+            document.getElementById('battle-messages').innerHTML = 'Error: No se encontraron los datos de la batalla. Vuelve a seleccionar equipos.';
+            return;
+        }
+        fetch('/api/chrono/battle/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ allies, enemies, epoca })
+        })
+        .then(res => res.json())
+        .then(state => {
+            if (state.error) {
+                document.getElementById('battle-messages').innerHTML = 'Error al iniciar la batalla: ' + state.error;
+                return;
+            }
+            battleState = state;
+            renderBattle(state);
+            startPollingBattle();
+        });
+    }
+
+    function resetBattle() {
+        fetch('/api/chrono/battle/reset', { method: 'POST' })
+            .then(res => res.json())
+            .then(state => {
+                battleState = state;
+                renderBattle(state);
+            });
+    }
+
+    // Si no hay datos guardados, muestra error
+    if (!savedAllies || !savedEnemies || !savedEpoca) {
+        document.getElementById('battle-messages').innerHTML = 'Error: No se encontraron los datos de la batalla. Vuelve a seleccionar equipos.';
+    }
+
+    // Al cargar la página, renderiza las tarjetas solo una vez
+    window.addEventListener('DOMContentLoaded', function() {
+        let allies = null;
+        let enemies = null;
+        try {
+            allies = JSON.parse(localStorage.getItem('chrono_allies'));
+            enemies = JSON.parse(localStorage.getItem('chrono_enemies'));
+        } catch (e) {}
+        if (allies) renderEntitiesInitial(allies, 'allies-list', true);
+        if (enemies) renderEntitiesInitial(enemies, 'enemies-list', false);
+    });
+
+    // --- NUEVO: Funciones para técnicas ---
+    function showTechs() {
+        if (selectedAllyIdx === null) {
+            alert('Selecciona un personaje primero.');
+            return;
+        }
+        loadTechs();
+        document.getElementById('techs-panel').style.display = 'block';
+    }
+
+    function hideTechs() {
+        document.getElementById('techs-panel').style.display = 'none';
+        selectedTech = null;
+    }
+
+    function loadTechs() {
+        const actor = (selectedAllyIdx !== null && battleState && battleState.allies) ? battleState.allies[selectedAllyIdx] : null;
+        let url = '/api/chrono/moves';
+        if (actor) {
+            url += '?character=' + encodeURIComponent(actor.name);
+        }
+        fetch(url)
+            .then(res => res.json())
+            .then(techs => {
+                console.log('[DEBUG] Técnicas recibidas del backend:', techs);
+                availableTechs = techs;
+                renderTechs();
+            });
+    }
+
+    function renderTechs() {
+        const techsList = document.getElementById('techs-list');
+        techsList.innerHTML = '';
+        
+        // Obtener personajes actuales en el equipo
+        const currentAllies = (battleState && battleState.allies) ? battleState.allies.map(a => a.name) : [];
+        // Determinar el personaje activo
+        const actor = (selectedAllyIdx !== null && battleState && battleState.allies) ? battleState.allies[selectedAllyIdx] : null;
+        // Filtrar técnicas solo del personaje activo y no mostrar 'Attack'
+        let singleTechs = [], doubleTechs = [], tripleTechs = [];
+        if (actor) {
+            // Mostrar solo técnicas individuales cuyo owner sea el personaje activo
+            singleTechs = availableTechs.filter(tech =>
+                (!tech.moveType || tech.moveType === 'single') &&
+                tech.name !== 'Attack' &&
+                tech.owner === actor.name
+            );
+            // Técnicas dobles y triples: solo si el personaje activo está involucrado y todos los requeridos están presentes
+            doubleTechs = availableTechs.filter(tech => tech.moveType === 'double' && tech.requiredCharacters && tech.requiredCharacters.includes(actor.name) && tech.requiredCharacters.every(c => currentAllies.includes(c)));
+            tripleTechs = availableTechs.filter(tech => tech.moveType === 'triple' && tech.requiredCharacters && tech.requiredCharacters.includes(actor.name) && tech.requiredCharacters.every(c => currentAllies.includes(c)));
+        }
+        // Crear secciones por categoría
+        if (singleTechs.length > 0) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.innerHTML = '<h4 style="color:#4caf50; margin-bottom:0.5em;">Técnicas Individuales</h4>';
+            techsList.appendChild(sectionDiv);
+            techsList.appendChild(document.createElement('br'));
+            
+            singleTechs.forEach(tech => {
+                const techDiv = document.createElement('div');
+                techDiv.className = 'tech-item';
+                if (selectedTech && selectedTech.name === tech.name) techDiv.classList.add('selected');
+                const poder = tech.TP ?? tech.tp ?? tech.power ?? '';
+                techDiv.innerHTML = `
+                    <div><strong>${tech.name}</strong></div>
+                    <div>Poder: ${poder}</div>
+                    <div>MP: ${tech.cost ?? tech.MP ?? ''}</div>
+                    <div>Tipo: ${tech.type || tech.element || 'Físico'}</div>
+                `;
+                techDiv.onclick = (event) => {
+                    document.querySelectorAll('.tech-item').forEach(item => item.classList.remove('selected'));
+                    techDiv.classList.add('selected');
+                    selectTech(tech, event);
+                };
+                techsList.appendChild(techDiv);
+            });
+        }
+        
+        if (doubleTechs.length > 0) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.innerHTML = '<h4 style="color:#ff9800; margin-bottom:0.5em; margin-top:1em;">Técnicas Dobles</h4>';
+            techsList.appendChild(sectionDiv);
+            techsList.appendChild(document.createElement('br'));
+            
+            doubleTechs.forEach(tech => {
+                const techDiv = document.createElement('div');
+                techDiv.className = 'tech-item';
+                if (selectedTech && selectedTech.name === tech.name) techDiv.classList.add('selected');
+                const poder = tech.TP ?? tech.tp ?? tech.power ?? '';
+                techDiv.innerHTML = `
+                    <div><strong>${tech.name}</strong></div>
+                    <div>Poder: ${poder}</div>
+                    <div>MP: ${tech.cost ?? tech.MP ?? ''}</div>
+                    <div>Tipo: ${tech.type || tech.element || 'Físico'}</div>
+                    <div>Requiere: ${tech.requiredCharacters ? tech.requiredCharacters.join(', ') : (tech.characters ? tech.characters.join(', ') : '')}</div>
+                `;
+                techDiv.onclick = (event) => {
+                    document.querySelectorAll('.tech-item').forEach(item => item.classList.remove('selected'));
+                    techDiv.classList.add('selected');
+                    selectTech(tech, event);
+                };
+                techsList.appendChild(techDiv);
+            });
+        }
+        
+        if (tripleTechs.length > 0) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.innerHTML = '<h4 style="color:#f44336; margin-bottom:0.5em; margin-top:1em;">Técnicas Triples</h4>';
+            techsList.appendChild(sectionDiv);
+            techsList.appendChild(document.createElement('br'));
+            
+            tripleTechs.forEach(tech => {
+                const techDiv = document.createElement('div');
+                techDiv.className = 'tech-item';
+                if (selectedTech && selectedTech.name === tech.name) techDiv.classList.add('selected');
+                const poder = tech.TP ?? tech.tp ?? tech.power ?? '';
+                techDiv.innerHTML = `
+                    <div><strong>${tech.name}</strong></div>
+                    <div>Poder: ${poder}</div>
+                    <div>MP: ${tech.cost ?? tech.MP ?? ''}</div>
+                    <div>Tipo: ${tech.type || tech.element || 'Físico'}</div>
+                    <div>Requiere: ${tech.requiredCharacters ? tech.requiredCharacters.join(', ') : (tech.characters ? tech.characters.join(', ') : '')}</div>
+                `;
+                techDiv.onclick = (event) => {
+                    document.querySelectorAll('.tech-item').forEach(item => item.classList.remove('selected'));
+                    techDiv.classList.add('selected');
+                    selectTech(tech, event);
+                };
+                techsList.appendChild(techDiv);
+            });
+        }
+    }
+
+    function selectTech(tech, event) {
+        selectedTech = tech;
+        // Resaltar técnica seleccionada
+        document.querySelectorAll('.tech-item').forEach(item => item.classList.remove('selected'));
+        if (event && event.target.closest('.tech-item')) event.target.closest('.tech-item').classList.add('selected');
+        // Si hay un enemigo seleccionado, ejecutar la técnica
+        if (selectedEnemyIdx !== null) {
+            executeTech(tech);
+        } else {
+            alert('Selecciona un enemigo como objetivo.');
+        }
+    }
+
+    function executeTech(tech) {
+        if (!battleState || selectedAllyIdx === null || selectedEnemyIdx === null) return;
+        const actor = battleState.allies[selectedAllyIdx];
+        const target = battleState.enemies[selectedEnemyIdx];
+        const actorName = actor && actor.name ? actor.name : '';
+        const targetName = target && target.name ? target.name : '';
+        fetch('/api/chrono/battle/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                actor: actorName, 
+                move: tech.name, 
+                target: targetName 
+            })
+        })
+        .then(res => res.json())
+        .then(async state => {
+            if (state.error) {
+                document.getElementById('battle-messages').innerHTML = 'Error al ejecutar la técnica: ' + state.error;
+                return;
+            }
+            // Animación de ataque para técnicas
+            if (selectedAllyIdx !== null && selectedEnemyIdx !== null) {
+                await animateAttackChrono(selectedAllyIdx, selectedEnemyIdx, true);
+            }
+            battleState = state;
+            selectedAllyIdx = null;
+            selectedEnemyIdx = null;
+            selectedTech = null;
+            hideTechs();
+            renderBattle(state);
+            // Animación de victoria si corresponde
+            if (state.enemies && state.enemies.every(e => e.hp <= 0)) {
+                showWinnerAnimationChrono('Aliados');
+            } else if (state.allies && state.allies.every(a => a.hp <= 0)) {
+                showWinnerAnimationChrono('Enemigos');
+            }
+        });
+    }
+
+    // --- Animación de ataque ---
+    function animateAttackChrono(attackerIdx, defenderIdx, isAllyAttacker) {
+        // Busca la card del atacante y defensor
+        const attackerList = isAllyAttacker ? document.getElementById('allies-list') : document.getElementById('enemies-list');
+        const defenderList = isAllyAttacker ? document.getElementById('enemies-list') : document.getElementById('allies-list');
+        const attackerCard = attackerList.querySelectorAll('.entity-card')[attackerIdx];
+        const defenderCard = defenderList.querySelectorAll('.entity-card')[defenderIdx];
+        if (!attackerCard || !defenderCard) return Promise.resolve();
+        // Texto del movimiento
+        const moveText = document.createElement('div');
+        moveText.className = 'move-text';
+        moveText.textContent = '¡Ataque!';
+        document.body.appendChild(moveText);
+        // Animar
+        attackerCard.classList.add('attacking');
+        defenderCard.classList.add('taking-damage');
+        return new Promise(resolve => {
+            setTimeout(() => {
+                attackerCard.classList.remove('attacking');
+                defenderCard.classList.remove('taking-damage');
+                moveText.remove();
+                resolve();
+            }, 1000);
+        });
+    }
+
+    // --- Animación de victoria ---
+    function showWinnerAnimationChrono(winner) {
+        const announcement = document.getElementById('winnerAnnouncement');
+        const winnerText = document.getElementById('winnerText');
+        winnerText.textContent = `${winner} ha ganado la batalla!`;
+        announcement.classList.add('show');
+        createConfettiChrono();
+        setTimeout(() => {
+            announcement.classList.remove('show');
+        }, 5000);
+    }
+
+    function createConfettiChrono() {
+        const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+        for (let i = 0; i < 100; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+            document.body.appendChild(confetti);
+            setTimeout(() => { confetti.remove(); }, 5000);
+        }
+    }
+
+    // --- NUEVO: Funciones para objetos ---
+    let availableItems = [];
+    let selectedItem = null;
+    let selectedItemTargetIdx = null;
+
+    function showItems() {
+        if (selectedAllyIdx === null) {
+            alert('Selecciona un personaje primero.');
+            return;
+        }
+        loadItems();
+        document.getElementById('items-panel').style.display = 'block';
+    }
+
+    function hideItems() {
+        document.getElementById('items-panel').style.display = 'none';
+        selectedItem = null;
+        selectedItemTargetIdx = null;
+    }
+
+    function loadItems() {
+        fetch('/chrono-json/chrono-items.json')
+            .then(res => res.json())
+            .then(items => {
+                availableItems = items.filter(item => item.effect && (item.effect.toLowerCase().includes('restore') || item.effect.toLowerCase().includes('revive') || item.effect.toLowerCase().includes('status')));
+                renderItems();
+            });
+    }
+
+    function renderItems() {
+        const itemsList = document.getElementById('items-list');
+        itemsList.innerHTML = '';
+        availableItems.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'tech-item';
+            if (selectedItem && selectedItem.name === item.name) itemDiv.classList.add('selected');
+            // Analizar el efecto para mostrarlo de forma clara
+            let efecto = '';
+            const eff = item.effect ? item.effect.toLowerCase() : '';
+            if (eff.includes('all hp/mp for all')) {
+                efecto = 'Restaura todo el HP/MP a todos';
+            } else if (eff.includes('all hp/mp')) {
+                efecto = 'Restaura todo el HP/MP';
+            } else if (eff.includes('all mp')) {
+                efecto = 'Restaura todo el MP';
+            } else if (eff.includes('all hp')) {
+                efecto = 'Restaura todo el HP';
+            } else if (eff.includes('500 hp')) {
+                efecto = 'Cura 500 HP a uno';
+            } else if (eff.includes('200 hp to all')) {
+                efecto = 'Cura 200 HP a todos';
+            } else if (eff.includes('200 hp')) {
+                efecto = 'Cura 200 HP a uno';
+            } else if (eff.includes('60 mp')) {
+                efecto = 'Restaura 60 MP a uno';
+            } else if (eff.includes('30 mp')) {
+                efecto = 'Restaura 30 MP a uno';
+            } else if (eff.includes('10 mp')) {
+                efecto = 'Restaura 10 MP a uno';
+            } else if (eff.includes('50 hp')) {
+                efecto = 'Cura 50 HP a uno';
+            } else if (eff.includes('revives ally')) {
+                efecto = 'Revive a un aliado con 50 HP';
+            } else if (eff.includes('restores status')) {
+                efecto = 'Cura estado alterado';
+            } else if (eff.includes('permanently adds one point to magic stat')) {
+                efecto = 'Aumenta Magia +1 (permanente)';
+            } else if (eff.includes('permanently adds one point to power stat')) {
+                efecto = 'Aumenta Fuerza +1 (permanente)';
+            } else if (eff.includes('permanently adds one point to speed stat')) {
+                efecto = 'Aumenta Velocidad +1 (permanente)';
+            } else if (eff.includes('reduces magic damage')) {
+                efecto = 'Reduce daño mágico';
+            } else if (eff.includes('reduces physical damage')) {
+                efecto = 'Reduce daño físico';
+            } else {
+                efecto = item.effect;
+            }
+            itemDiv.innerHTML = `
+                <div><strong>${item.name}</strong></div>
+                <div>Efecto: ${efecto}</div>
+            `;
+            itemDiv.onclick = (event) => {
+                document.querySelectorAll('#items-list .tech-item').forEach(itemDiv2 => itemDiv2.classList.remove('selected'));
+                itemDiv.classList.add('selected');
+                selectItem(item, event);
+            };
+            itemsList.appendChild(itemDiv);
+        });
+    }
+
+    function selectItem(item, event) {
+        selectedItem = item;
+        // Resaltar objeto seleccionado
+        document.querySelectorAll('#items-list .tech-item').forEach(itemDiv => itemDiv.classList.remove('selected'));
+        if (event && event.target.closest('.tech-item')) event.target.closest('.tech-item').classList.add('selected');
+        // Usar el objeto directamente sobre el personaje seleccionado
+        executeItem();
+    }
+
+    function executeItem() {
+        if (!battleState || selectedAllyIdx === null || !selectedItem) return;
+        const actor = battleState.allies[selectedAllyIdx];
+        const actorName = actor && actor.name ? actor.name : '';
+        const level = actor && actor.level ? actor.level : 1;
+        // El objetivo es el mismo actor
+        fetch('/api/chrono/battle/use-item', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                user: actorName, 
+                item: selectedItem.name, 
+                target: actorName,
+                level: level
+            })
+        })
+        .then(res => res.json())
+        .then(async state => {
+            if (state.error) {
+                document.getElementById('battle-messages').innerHTML = 'Error al usar el objeto: ' + state.error;
+                return;
+            }
+            battleState = state;
+            selectedAllyIdx = null;
+            selectedItem = null;
+            selectedItemTargetIdx = null;
+            hideItems();
+            renderBattle(state);
+            // Animación de victoria si corresponde
+            if (state.enemies && state.enemies.every(e => e.hp <= 0)) {
+                showWinnerAnimationChrono('Aliados');
+            } else if (state.allies && state.allies.every(a => a.hp <= 0)) {
+                showWinnerAnimationChrono('Enemigos');
+            }
+        });
+    }
+    
+    // Función para alternar el modo oscuro
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    // Al cargar la página, aplica el modo oscuro si está guardado
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    });
+    </script>
+</body>
+</html> 

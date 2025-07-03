@@ -1,0 +1,170 @@
+[
+  {
+    "Name": "Hide Cap",
+    "Buy": "-",
+    "Sell": "25",
+    "Def": "3",
+    "Effect": "-"
+  },
+  {
+    "Name": "BronzeHelm",
+    "Buy": "200",
+    "Sell": "100",
+    "Def": "8",
+    "Effect": "-"
+  },
+  {
+    "Name": "Iron Helm",
+    "Buy": "500",
+    "Sell": "250",
+    "Def": "14",
+    "Effect": "-"
+  },
+  {
+    "Name": "Beret",
+    "Buy": "700",
+    "Sell": "350",
+    "Def": "17",
+    "Effect": "-"
+  },
+  {
+    "Name": "Gold Helm",
+    "Buy": "-",
+    "Sell": "600",
+    "Def": "18",
+    "Effect": "-"
+  },
+  {
+    "Name": "Rock Helm",
+    "Buy": "H+F*",
+    "Sell": "1000",
+    "Def": "20",
+    "Effect": "-"
+  },
+  {
+    "Name": "CeraTopper",
+    "Buy": "-",
+    "Sell": "1250",
+    "Def": "23",
+    "Effect": "-"
+  },
+  {
+    "Name": "Taban Helm",
+    "Buy": "-",
+    "Sell": "-",
+    "Def": "24",
+    "Effect": "Magic Defense +10"
+  },
+  {
+    "Name": "Glow Helm",
+    "Buy": "2300",
+    "Sell": "1150",
+    "Def": "25",
+    "Effect": "-"
+  },
+  {
+    "Name": "Lode Helm",
+    "Buy": "6500",
+    "Sell": "3250",
+    "Def": "29",
+    "Effect": "-"
+  },
+  {
+    "Name": "Doom Helm",
+    "Buy": "-",
+    "Sell": "4750",
+    "Def": "29",
+    "Effect": "-"
+  },
+  {
+    "Name": "Sight Cap",
+    "Buy": "20000",
+    "Sell": "10000",
+    "Def": "30",
+    "Effect": "Prevents \"Chaos\" status effect"
+  },
+  {
+    "Name": "Memory Cap",
+    "Buy": "20000",
+    "Sell": "10000",
+    "Def": "30",
+    "Effect": "Prevents \"Lock\" status effect"
+  },
+  {
+    "Name": "Time Hat",
+    "Buy": "30000",
+    "Sell": "15000",
+    "Def": "30",
+    "Effect": "Prevents \"Stop\" and \"Slow\" status effects"
+  },
+  {
+    "Name": "Aeon Helm",
+    "Buy": "7800",
+    "Sell": "3900",
+    "Def": "33",
+    "Effect": "-"
+  },
+  {
+    "Name": "Haste Helm",
+    "Buy": "-",
+    "Sell": "6000",
+    "Def": "35",
+    "Effect": "Increases speed by 50%"
+  },
+  {
+    "Name": "R'bow Helm",
+    "Buy": "-",
+    "Sell": "8000",
+    "Def": "35",
+    "Effect": "Reduces Lightning damage by 50%"
+  },
+  {
+    "Name": "MermaidCap",
+    "Buy": "-",
+    "Sell": "8000",
+    "Def": "35",
+    "Effect": "Reduces Water damage by 50%"
+  },
+  {
+    "Name": "Dark Helm",
+    "Buy": "-",
+    "Sell": "6000",
+    "Def": "35",
+    "Effect": "Reduces Shadow damage by 50%"
+  },
+  {
+    "Name": "Vigil Hat",
+    "Buy": "50000",
+    "Sell": "25000",
+    "Def": "36",
+    "Effect": "Protects status"
+  },
+  {
+    "Name": "Safe Helm",
+    "Buy": "-",
+    "Sell": "-",
+    "Def": "38",
+    "Effect": "Cuts physical damage by 1/3"
+  },
+  {
+    "Name": "Prism Helm",
+    "Buy": "-",
+    "Sell": "400",
+    "Def": "40",
+    "Effect": "Protects status"
+  },
+  {
+    "Name": "Gloom Helm",
+    "Buy": "-",
+    "Sell": "6500",
+    "Def": "42",
+    "Effect": "Protects status"
+  },
+  {
+    "Name": "OzziePants",
+    "Buy": "-",
+    "Sell": "-",
+    "Def": "45",
+    "Effect": "Confuses user and gives them \"HP-Down\" status"
+  }
+]

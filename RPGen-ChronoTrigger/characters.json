@@ -1,0 +1,50 @@
+[
+  {
+    "id": "b3890048-61a0-4905-9fd3-77e4a8124d19",
+    "name": "Arquero",
+    "health": 80,
+    "maxHealth": 80,
+    "attack": 18,
+    "defense": 8,
+    "speed": 0,
+    "availableActions": [],
+    "defenseBonus": 0,
+    "shielded": false
+  },
+  {
+    "id": "9a97b87c-681d-4752-82e7-99f7d5b1311b",
+    "name": "Mago",
+    "health": 70,
+    "maxHealth": 70,
+    "attack": 30,
+    "defense": 5,
+    "speed": 0,
+    "availableActions": [],
+    "defenseBonus": 0,
+    "shielded": false
+  },
+  {
+    "id": "d61e724f-c3b8-4931-a4f5-e2bfd9c2837f",
+    "name": "Guerrero",
+    "health": 100,
+    "maxHealth": 100,
+    "attack": 20,
+    "defense": 10,
+    "speed": 0,
+    "availableActions": [],
+    "defenseBonus": 0,
+    "shielded": false
+  },
+  {
+    "id": "d8313e05-647d-439a-b346-ebe726219dbc",
+    "name": "1",
+    "health": 100,
+    "maxHealth": 100,
+    "attack": 20,
+    "defense": 20,
+    "speed": 0,
+    "availableActions": [],
+    "defenseBonus": 0,
+    "shielded": false
+  }
+]

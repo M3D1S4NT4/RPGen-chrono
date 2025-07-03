@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Selección de Equipos - Chrono Trigger</title>
+    <style>
+        body { background: #f0f0f0; color: #222; font-family: Arial, sans-serif; margin: 2em; padding-top: 70px !important; }
+        body.dark-mode .team-select {
+            background: #181818 !important;
+        }
+        body.dark-mode {
+            background: #181818 !important;
+            color: #fff !important;
+        }
+        body {
+            background: #f0f0f0 !important;
+        }
+        h1 { color: #222; }
+        .team-select { display: flex; gap: 2em; height: 80vh; align-items: stretch; margin-top: 50px; }
+        .team-list { background: #fff; color: #222; border-radius: 12px; box-shadow: 0 2px 8px #0006; padding: 1em; width: 340px; display: flex; flex-direction: column; height: 100%; }
+        .team-list h2 { margin-top: 0; color: #222; }
+        .card-list { display: flex; flex-direction: column; gap: 1em; margin: 0; padding: 0; list-style: none; flex: 1; overflow-y: auto; min-height: 0; max-height: 100%; }
+        .card { background: #f9f9f9; color: #222; border-radius: 10px; box-shadow: 0 1px 4px #0004; padding: 1em; cursor: pointer; transition: box-shadow 0.2s, background 0.2s, min-height 0.3s, max-height 0.3s; position: relative; overflow: hidden; min-height: 100px; }
+        .card.selected, .card.expanded { background: #e8f5e9; }
+        .card .name { font-weight: bold; font-size: 1.1em; }
+        .card .stats {
+            opacity: 0;
+            max-height: 0;
+            transition: opacity 0.2s, max-height 0.3s;
+            overflow: hidden;
+        }
+        .card.expanded .stats {
+            opacity: 1 !important;
+            min-height: 210px !important;
+            margin-top: 0.5em !important;
+            pointer-events: auto !important;
+        }
+        .card.expanded {
+            opacity: 1 !important;
+            min-height: 200px !important;
+            margin-top: 0.5em !important;
+            pointer-events: auto !important;
+        }
+        .card .stat-row { display: flex; gap: 1em; font-size: 0.95em; color: #222; }
+        .card .stat-label { color: #aaa; min-width: 80px; }
+        .equipment-section { margin-bottom: 1em; }
+        .equipment-section label { display: block; margin-bottom: 0.5em; color: #222; }
+        body.dark-mode .equipment-section label { color: #e0e0e0 !important; }
+        .equipment-select, .dropdown-epoca {
+            background: #fff;
+            color: #222;
+            border: 1px solid #ccc;
+            font-size: 1em;
+            width: 100%;
+            min-height: 2.5em;
+            padding: 0.5em 1em;
+            border-radius: 8px;
+            margin-bottom: 0.5em;
+        }
+        body.dark-mode .equipment-select, body.dark-mode .dropdown-epoca {
+            background: #232323;
+            color: #f0f0f0;
+            border: 1px solid #555;
+        }
+        button { background-color: #4CAF50; color: white; margin-top: 1em; padding: 0.7em 1.5em; border-radius: 8px; border: none; font-weight: bold; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+        button:disabled { background: #888; cursor: not-allowed; }
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #222;
+            color: #fff;
+            z-index: 10000;
+            box-shadow: 0 2px 8px #0002;
+        }
+        .main-header nav {
+            display: flex;
+            justify-content: center;
+            gap: 2em;
+            padding: 1em 0;
+        }
+        .main-header a, .main-header .theme-toggle {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.2s, background 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 0.5em;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .main-header a:hover, .main-header .theme-toggle:hover {
+            color: #4CAF50;
+            background: none;
+        }
+        body.dark-mode .main-header a, body.dark-mode .main-header .theme-toggle {
+            color: #f0f0f0;
+        }
+        body.dark-mode .main-header a:hover, body.dark-mode .main-header .theme-toggle:hover {
+            color: #6fcf97;
+        }
+        .theme-toggle {
+            margin-top: 0;
+        }
+        body.dark-mode .team-list { background: #232323; color: #f0f0f0; }
+        body.dark-mode .card { background: #2d2d2d; color: #f0f0f0; }
+        body.dark-mode .card.selected, body.dark-mode .card.expanded { background: #294d29; }
+        body.dark-mode .equipment-select, body.dark-mode .dropdown-epoca { background: #232323; color: #f0f0f0; border: 1px solid #555; }
+        body.dark-mode button { background-color: #666; color: #fff; }
+        body.dark-mode button:hover { background-color: #777; }
+        body.dark-mode {
+            background: #181818 !important;
+            color: #fff !important;
+        }
+        body.dark-mode .team-select,
+        body.dark-mode .team-list,
+        body.dark-mode .card,
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode label,
+        body.dark-mode .stat-label {
+            color: #f0f0f0 !important;
+        }
+        .equipo-hover-block { display: none; }
+        .card.expanded .equipo-hover-block { display: block; }
+        /* Asegura que el bloque de equipo siempre sea visible */
+        .equipo-lista { display: block !important; color: #2ecc40; }
+        .card .stat-row, #selected-character-name .stat-row { display: flex; gap: 1em; font-size: 0.95em; color: #2ecc40; }
+        .card .stat-label, #selected-character-name .stat-label { color: #185c1b; min-width: 80px; }
+        body.dark-mode .equipo-lista { color: #7fff7f !important; }
+        body.dark-mode .card .stat-row, body.dark-mode #selected-character-name .stat-row { color: #7fff7f !important; }
+        body.dark-mode .card .stat-label, body.dark-mode #selected-character-name .stat-label { color: #baffc9 !important; }
+        .main-battle-btn {
+            font-size: 1.2em;
+            padding: 0.9em 2.2em;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            color: #222;
+            font-weight: bold;
+            border: none;
+            margin: 0 0.5em;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+        .main-battle-btn:hover {
+            background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+            transform: scale(1.05);
+        }
+        body.dark-mode .main-battle-btn {
+            background: linear-gradient(90deg, #232b23 0%, #38f9d7 100%);
+            color: #fff;
+        }
+        .dropdown-epoca {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            color: #222;
+            font-weight: bold;
+            box-shadow: 0 2px 8px #0003;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .dropdown-epoca option {
+            background: #fff;
+            color: #222;
+        }
+        body.dark-mode .dropdown-epoca {
+            background: linear-gradient(90deg, #232b23 0%, #38f9d7 100%);
+            color: #fff;
+            border-color: #555;
+        }
+        body.dark-mode .dropdown-epoca option {
+            background: #232b23;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="pokemon.html">Pokédex</a>
+            <a href="battle.html">Combate Pokémon</a>
+            <a href="chrono-team.html">Selección de Equipos Chrono</a>
+            <a href="chrono-battle.html">Combate Chrono Trigger</a>
+            <button class="theme-toggle" onclick="toggleDarkMode()">Cambiar Tema</button>
+        </nav>
+    </header>
+    <h1>Selecciona tu equipo y los enemigos</h1>
+    <div style="margin-bottom:1em; text-align:center;">
+        <button id="start-battle" class="main-battle-btn">Iniciar Batalla</button>
+    </div>
+    <div class="team-select" style="height: 80vh; align-items: stretch;">
+        <div class="team-list" id="characters-list" style="flex:1; display:flex; flex-direction:column; height:100%;">
+            <h2>Personajes disponibles</h2>
+            <ul id="characters" class="card-list" style="flex:1; overflow-y:auto; min-height:0; max-height:100%;"></ul>
+        </div>
+        <div class="team-list" id="equipment-list" style="flex:1; display:flex; flex-direction:column; height:100%;">
+            <h2>Equipo</h2>
+            <div id="equipment-panel" style="display:none;">
+                <h3 id="selected-character-name">Selecciona un personaje</h3>
+                <div class="equipment-section">
+                    <label>Arma:</label>
+                    <select id="weapon-select" class="equipment-select">
+                        <option value="">Sin arma</option>
+                    </select>
+                </div>
+                <div class="equipment-section">
+                    <label>Armadura:</label>
+                    <select id="armor-select" class="equipment-select">
+                        <option value="">Sin armadura</option>
+                    </select>
+                </div>
+                <div class="equipment-section">
+                    <label>Casco:</label>
+                    <select id="helmet-select" class="equipment-select">
+                        <option value="">Sin casco</option>
+                    </select>
+                </div>
+                <div class="equipment-section">
+                    <label>Accesorio:</label>
+                    <select id="accessory-select" class="equipment-select">
+                        <option value="">Sin accesorio</option>
+                    </select>
+                </div>
+            </div>
+            <div id="no-character-selected" style="text-align:center; color:#888; margin-top:2em;">
+                Selecciona un personaje para equiparlo
+            </div>
+        </div>
+        <div class="team-list" id="enemies-list" style="flex:1; display:flex; flex-direction:column; height:100%;">
+            <h2>Enemigos disponibles</h2>
+            <select id="epoca-select" class="dropdown-epoca">
+                <option value="65000000BC">65,000,000 AC</option>
+                <option value="12000BC">12000 AC</option>
+                <option value="600AD">600 DC</option>
+                <option value="1000AD">1000 DC</option>
+                <option value="2300AD">2300 DC</option>
+                <option value="BlackOmen">Black Omen</option>
+                <option value="lavos-forms">Formas de Lavos</option>
+                <option value="spekkio-forms">Formas de Spekkio</option>
+            </select>
+            <ul id="enemies" class="card-list"></ul>
+        </div>
+    </div>
+
+    <script>
+    let selectedAllies = [];
+    let selectedEnemies = [];
+    let expandedCard = null;
+    let equipmentData = { weapons: [], armors: [], helmets: [], accessories: [], weaponsByCharacter: {} };
+    let characterEquipment = {}; // { characterIndex: { weapon: "", armor: "", helmet: "", accessory: "" } }
+
+    // --- Personajes ---
+    let characterLevels = {};
+    let characterStatsData = [];
+    let maxAllies = 3;
+    let maxEnemies = 5;
+
+    function getCharacterImage(name) {
+        // Solo personajes jugables
+        const playable = ['crono','marle','lucca','frog','robo','ayla','magus'];
+        const key = name.toLowerCase();
+        if (playable.includes(key)) {
+            return `https://shrines.rpgclassics.com/snes/ct/images/${key}.gif`;
+        }
+        return null;
+    }
+
+    // Mapa de excepciones para imágenes de enemigos
+    const enemyImageExceptions = {
+        // 65000000BC
+        'anion': 'bc65mil/ion.gif',
+        'croaker': 'bc65mil/amphibite.gif',
+        'nizbel ii': 'bc65mil/nizbel2.gif',
+        'rain frog': 'bc65mil/amphibite.gif',
+        'reptite (1)': 'bc65mil/reptite.gif',
+        'winged ape': 'bc65mil/wingape.gif',
+        // 12000BC
+        'giga gaia (right hand)': 'bc12000/gigagaiarh.gif',
+        'giga gaia (left hand)': 'bc12000/gigagaialh.gif',
+        'lavos': 'ad1999/lavos.gif',
+        'man-eater': 'bc12000/maneater.gif',
+        'nu (1)': 'bc65mil/nu.gif',
+        'nu (2)': 'bc65mil/nu.gif',
+        // 600AD
+        'magus': 'ad600/maguse.gif',
+        'masa&mune': 'ad600/masamune.gif',
+        'nu': 'bc65mil/nu.gif',
+        'omnicrone': 'ad1000/omnicrone.gif',
+        'ozzie (1)': 'ad600/ozz.gif',
+        'ozzie (2)': 'ad600/ozzie.gif',
+        'ozzie (3)': 'ad600/ozzie.gif',
+        'retinite (top)': 'ad600/retinitet.gif',
+        'retinite (core)': 'ad600/retinitem.gif',
+        'retinite (bottom)': 'ad600/retiniteb.gif',
+        'shadow': 'ad2300/shadow.gif',
+        'slash (1)': 'ad600/slashns.gif',
+        'slash (2)': 'ad600/slashe.gif',
+        'super slash (1)': 'ad600/superslash.gif',
+        'zombor (head)': 'ad600/zomborh.gif',
+        'zombor (bottom)': 'ad600/zomborb.gif',
+        // 1000AD
+        'base': 'ad600/base.gif',
+        'defunct': 'ad600/defunct.gif',
+        'departed': 'ad600/departed.gif',
+        'hench (1)': 'ad600/hench1.gif',
+        'naga-ette': 'ad600/naga-ette.gif',
+        'reaper': 'ad600/reaper.gif',
+        'sentry': 'ad600/sentry.gif',
+        // 2300AD
+        'laser guard': 'blackomen/laserguard.gif',
+        'lavos spawn (head)': 'ad2300/lavosspawndp.gif',
+        'lavos spawn (shell)': 'blackomen/lavosspawns.gif',
+        'son of sun (fake flame)': 'ad2300/flame.gif',
+        'son of sun (real flame)': 'ad2300/flame.gif',
+        // Black Omen
+        'giga mutant (bottom)': 'blackomen/gigamutantb.gif',
+        'giga mutant (top)': 'blackomen/gigamutantt.gif',
+        'lavos spawn (head)': 'blackomen/lavosspawnbo.gif',
+        'lavos spawn (shell)': 'blackomen/lavosspawns.gif',
+        'mammon m.': 'blackomen/mammonm.gif',
+        'mega mutant (bottom)': 'blackomen/megamutantb.gif',
+        'mega mutant (top)': 'blackomen/megamutantt.gif',
+        'terramutant (bottom)': 'blackomen/terramutantb.gif',
+        'terramutant (top)': 'blackomen/terramutantt.gif',
+        'zeal (1)': 'blackomen/zeal.gif',
+        'zeal (2) (head)': 'blackomen/zealh.gif',
+        'zeal (2) (left hand)': 'blackomen/zeallh.gif',
+        'zeal (2) (right hand)': 'blackomen/zealrh.gif',
+        // Spekkio Forms (en orden)
+        'spekkio': [
+            'blackomen/spekkio1.gif',
+            'blackomen/spekkio2.gif',
+            'blackomen/spekkio3.gif',
+            'blackomen/spekkio4.gif',
+            'blackomen/spekkio5.gif',
+            'blackomen/spekkio6.gif'
+        ],
+        // Lavos Forms
+        'lavos (1)': 'ad1999/lavos.gif',
+        'lavos part (1)': 'ad1999/lavoshelper1.gif',
+        'lavos part (2)': 'ad1999/lavoshelper2.gif',
+        'lavos (2)': 'ad1999/lavos.gif',
+        'lavos (3)': 'ad1999/lavosh.gif',
+        'lavos (3) (left hand)': 'ad1999/lavoslh.gif',
+        'lavos (3) (right hand)': 'ad1999/lavosrh.gif',
+        'lavos core': 'ad1999/lavosc.gif',
+        'lavos core (small bit)': 'ad1999/lavosc.gif',
+        'lavos core (central bit)': 'ad1999/lavoscb.gif',
+    };
+
+    function getEnemyImage(name, epoca, idx) {
+        if (!name) return null;
+        const key = name.trim().toLowerCase();
+        // Spekkio: usar el índice para elegir la imagen correcta
+        if (epoca === 'spekkio-forms' && enemyImageExceptions['spekkio']) {
+            const arr = enemyImageExceptions['spekkio'];
+            return `https://shrines.rpgclassics.com/snes/ct/${arr[idx] || arr[0]}`;
+        }
+        if (enemyImageExceptions[key]) {
+            return `https://shrines.rpgclassics.com/snes/ct/${enemyImageExceptions[key]}`;
+        }
+        // Mapear época a carpeta
+        const epocaFolderMap = {
+            '1000AD': 'ad1000',
+            '600AD': 'ad600',
+            '2300AD': 'ad2300',
+            '12000BC': 'bc12000',
+            '65000000BC': 'bc65mil',
+            'BlackOmen': 'blackomen',
+            'lavos-forms': 'lavos',
+            'spekkio-forms': 'blackomen'
+        };
+        const folder = epocaFolderMap[epoca] || 'ad1000';
+        let file = name.toLowerCase().replace(/\s+/g,'').replace(/\?/g,'').replace(/[()]/g,'').replace(/'/g,'');
+        return `https://shrines.rpgclassics.com/snes/ct/${folder}/${file}.gif`;
+    }
+
+    function renderCharacters(characters) {
+        const ul = document.getElementById('characters');
+        ul.innerHTML = '';
+        characterStatsData = characters;
+        characters.forEach((item, idx) => {
+            const li = document.createElement('li');
+            li.className = 'card';
+            const imgUrl = getCharacterImage(item.character);
+            li.innerHTML = (imgUrl ? `<img src="${imgUrl}" alt="${item.character}" style="width:48px;height:48px;vertical-align:middle;margin-right:0.5em;border-radius:6px;float:left;">` : '') + `<span class="name">${item.character}</span>`;
+            // Nivel selector
+            let level = characterLevels[idx] || 99;
+            let stats = item.statsByLevel ? item.statsByLevel.find(s => s.level === level) : null;
+            if (!stats && item.statsByLevel) stats = item.statsByLevel[0];
+            li.innerHTML += `<div style='margin-top:0.5em;'>Nivel: <input type='number' min='1' max='99' class='level-input' data-idx='${idx}' value='${level}' style='width:60px;'> </div>`;
+            li.innerHTML += `<div class="stats">
+                ${stats && stats.HP !== undefined ? `<div class="stat-row"><span class="stat-label">HP:</span> ${stats.HP}</div>` : ''}
+                ${stats && stats.MP !== undefined ? `<div class="stat-row"><span class="stat-label">MP:</span> ${stats.MP}</div>` : ''}
+                ${stats && stats.Strength !== undefined ? `<div class="stat-row"><span class="stat-label">Fuerza:</span> ${stats.Strength}</div>` : ''}
+                ${stats && stats.Stamina !== undefined ? `<div class="stat-row"><span class="stat-label">Defensa:</span> ${stats.Stamina}</div>` : ''}
+                ${stats && stats.Accuracy !== undefined ? `<div class="stat-row"><span class="stat-label">Precisión:</span> ${stats.Accuracy}</div>` : ''}
+                ${stats && stats.Evasion !== undefined ? `<div class="stat-row"><span class="stat-label">Evasión:</span> ${stats.Evasion}</div>` : ''}
+                ${stats && stats.Magic !== undefined ? `<div class="stat-row"><span class="stat-label">Magia:</span> ${stats.Magic}</div>` : ''}
+                ${stats && stats.MagicDefense !== undefined ? `<div class="stat-row"><span class="stat-label">Def. Mágica:</span> ${stats.MagicDefense}</div>` : ''}
+                ${stats && stats.Speed !== undefined ? `<div class="stat-row"><span class="stat-label">Velocidad:</span> ${stats.Speed}</div>` : ''}
+            </div>`;
+            // Mostrar objetos equipados debajo de las stats
+            const eq = characterEquipment[idx] || {};
+            const weaponObj = findEquipmentObj('weapon', eq.weapon);
+            const armorObj = findEquipmentObj('armor', eq.armor);
+            const helmetObj = findEquipmentObj('helmet', eq.helmet);
+            const accessoryObj = findEquipmentObj('accessory', eq.accessory);
+            let equipHtml = '<div class="equipo-lista" style="font-size:12px; margin-top:0.5em; color:#4c8c4c;">';
+            if (weaponObj) equipHtml += `<div><b>Arma:</b> ${weaponObj.name}${weaponObj.special ? ` <span style='color:#b0e0b0;'>(${weaponObj.special})</span>` : ''}</div>`;
+            if (armorObj) equipHtml += `<div><b>Armadura:</b> ${armorObj.Name}${armorObj.Effect ? ` <span style='color:#b0e0b0;'>(${armorObj.Effect})</span>` : ''}</div>`;
+            if (helmetObj) equipHtml += `<div><b>Casco:</b> ${helmetObj.Name}${helmetObj.Effect ? ` <span style='color:#b0e0b0;'>(${helmetObj.Effect})</span>` : ''}</div>`;
+            if (accessoryObj) equipHtml += `<div><b>Accesorio:</b> ${accessoryObj.Name}${accessoryObj.Effect ? ` <span style='color:#b0e0b0;'>(${accessoryObj.Effect})</span>` : ''}</div>`;
+            equipHtml += '</div>';
+            li.innerHTML += equipHtml;
+
+            li.onmouseenter = () => {
+                li.classList.add('expanded');
+            };
+            li.onmouseleave = () => {
+                li.classList.remove('expanded');
+            };
+            // Selección con límite
+            li.onclick = (e) => {
+                if (e.target.classList.contains('level-input')) return;
+                if (!selectedAllies.includes(idx)) {
+                    if (selectedAllies.length >= maxAllies) {
+                        alert('Solo puedes seleccionar hasta 3 personajes.');
+                        return;
+                    }
+                    selectedAllies.push(idx);
+                } else {
+                    selectedAllies = selectedAllies.filter(i => i !== idx);
+                }
+                renderCharacters(characterStatsData);
+                // Mostrar panel de equipo para el personaje seleccionado
+                updateEquipmentPanel(idx);
+            };
+            // Mantener borde de selección si está seleccionado
+            if (selectedAllies.includes(idx)) {
+                li.classList.add('selected');
+            }
+            ul.appendChild(li);
+        });
+        // Nivel selector listeners
+        ul.querySelectorAll('.level-input').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const idx = parseInt(this.getAttribute('data-idx'));
+                let val = parseInt(this.value);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > 99) val = 99;
+                characterLevels[idx] = val;
+                // Guardar niveles en localStorage para persistencia
+                localStorage.setItem('chrono_character_levels', JSON.stringify(characterLevels));
+                renderCharacters(characterStatsData);
+                // Si el personaje está seleccionado, refresca el panel de equipo
+                if (selectedAllies.includes(idx)) {
+                    updateEquipmentPanel(idx);
+                }
+            });
+        });
+    }
+
+    fetch('/api/chrono/characters')
+        .then(res => res.json())
+        .then(data => renderCharacters(data));
+
+    // --- Enemigos ---
+    const epocaMap = {
+        '1000AD': { file: '1000AD.json', key: 'enemies_1000_ad' },
+        '600AD': { file: '600AD.json', key: 'enemies_600_ad' },
+        '2300AD': { file: '2300AD.json', key: 'enemies_2300_ad' },
+        '12000BC': { file: '12000BC.json', key: 'enemies_12000_bc' },
+        '65000000BC': { file: '65000000BC.json', key: 'enemies_65000000_bc' },
+        'BlackOmen': { file: 'BlackOmen.json', key: 'enemies_black_omen' },
+        'lavos-forms': { file: 'lavos-forms.json', key: 'lavos_forms' },
+        'spekkio-forms': { file: 'spekkio-forms.json', key: 'spekkio_forms' }
+    };
+
+    function renderEnemies(enemies) {
+        const ul = document.getElementById('enemies');
+        ul.innerHTML = '';
+        const epoca = document.getElementById('epoca-select').value;
+        enemies.forEach((enemy, idx) => {
+            const li = document.createElement('li');
+            li.className = 'card';
+            const imgUrl = getEnemyImage(enemy.name, epoca, idx);
+            li.innerHTML = (imgUrl ? `<img src="${imgUrl}" alt="${enemy.name}" style="width:48px;height:48px;vertical-align:middle;margin-right:0.5em;border-radius:6px;float:left;">` : '') + `<span class="name">${enemy.name || 'Enemigo sin nombre'}</span>`;
+            li.innerHTML += `<div class="stats">
+                ${enemy.level !== undefined ? `<div class="stat-row"><span class="stat-label">Nivel:</span> ${enemy.level}</div>` : ''}
+                ${enemy.hp !== undefined ? `<div class="stat-row"><span class="stat-label">HP:</span> ${enemy.hp}</div>` : ''}
+                ${enemy.attack !== undefined ? `<div class="stat-row"><span class="stat-label">Ataque:</span> ${enemy.attack}</div>` : ''}
+                ${enemy.defense !== undefined ? `<div class="stat-row"><span class="stat-label">Defensa:</span> ${enemy.defense}</div>` : ''}
+                ${enemy.magic_power !== undefined ? `<div class="stat-row"><span class="stat-label">Magia:</span> ${enemy.magic_power}</div>` : ''}
+                ${enemy.magic_defense !== undefined ? `<div class="stat-row"><span class="stat-label">Magia Def.:</span> ${enemy.magic_defense}</div>` : ''}
+                ${enemy.speed !== undefined ? `<div class="stat-row"><span class="stat-label">Velocidad:</span> ${enemy.speed}</div>` : ''}
+                ${enemy.exp !== undefined ? `<div class="stat-row"><span class="stat-label">EXP:</span> ${enemy.exp}</div>` : ''}
+                ${enemy.gold !== undefined ? `<div class="stat-row"><span class="stat-label">Oro:</span> ${enemy.gold}</div>` : ''}
+                ${enemy.tp !== undefined ? `<div class="stat-row"><span class="stat-label">TP:</span> ${enemy.tp}</div>` : ''}
+                ${enemy.location !== undefined ? `<div class="stat-row"><span class="stat-label">Ubicación:</span> ${enemy.location}</div>` : ''}
+            </div>`;
+            // Hover para expandir
+            li.onmouseenter = () => li.classList.add('expanded');
+            li.onmouseleave = () => li.classList.remove('expanded');
+            // Selección con límite
+            li.onclick = () => {
+                if (!selectedEnemies.includes(idx)) {
+                    if (selectedEnemies.length >= maxEnemies) {
+                        alert('Solo puedes seleccionar hasta 5 enemigos.');
+                        return;
+                    }
+                    selectedEnemies.push(idx);
+                    li.classList.add('selected');
+                } else {
+                    selectedEnemies = selectedEnemies.filter(i => i !== idx);
+                    li.classList.remove('selected');
+                }
+            };
+            ul.appendChild(li);
+        });
+    }
+
+    function fetchAndRenderEnemies(epoca) {
+        const info = epocaMap[epoca];
+        if (!info) return;
+        fetch(`/chrono-json/enemies/${info.file}`)
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) data = data[0] || {};
+                const enemies = data[info.key] || [];
+                window.enemiesDataGlobal = enemies; // Guardar globalmente los datos completos
+                renderEnemies(enemies);
+            });
+    }
+
+    const epocaSelect = document.getElementById('epoca-select');
+    epocaSelect.onchange = function() {
+        fetchAndRenderEnemies(epocaSelect.value);
+    };
+    // Cargar por defecto la primera época
+    fetchAndRenderEnemies(epocaSelect.value);
+
+    // --- Iniciar batalla ---
+    document.getElementById('start-battle').onclick = function() {
+        if (selectedAllies.length === 0 || selectedEnemies.length === 0) {
+            alert('Selecciona al menos un personaje y un enemigo.');
+            return;
+        }
+        // Antes de armar alliesData, cargar niveles de localStorage si existen
+        const storedLevels = localStorage.getItem('chrono_character_levels');
+        if (storedLevels) {
+            characterLevels = JSON.parse(storedLevels);
+            console.log('Niveles cargados:', characterLevels);
+        }
+        // Obtener datos completos de aliados seleccionados
+        const alliesData = selectedAllies.map(idx => {
+            const char = characterStatsData[idx];
+            const level = characterLevels[idx] || 1;
+            let stats = char.statsByLevel ? char.statsByLevel.find(s => s.level === level) : null;
+            if (!stats && char.statsByLevel) stats = char.statsByLevel[0];
+            const equipment = characterEquipment[idx] || {};
+            const statsObj = stats ? {
+                level: level,
+                HP: stats.HP,
+                MP: stats.MP,
+                Strength: stats.Strength,
+                Stamina: stats.Stamina,
+                Accuracy: stats.Accuracy,
+                Evasion: stats.Evasion,
+                Magic: stats.Magic,
+                MagicDefense: stats.MagicDefense,
+                Speed: stats.Speed
+            } : {};
+            return {
+                name: char.character,
+                level: level,
+                hp: stats ? stats.HP : 1,
+                mp: stats ? stats.MP : 0,
+                weapon: equipment.weapon || null,
+                armor: equipment.armor || null,
+                helmet: equipment.helmet || null,
+                accessory: equipment.accessory || null,
+                stats: statsObj
+            };
+        });
+        // Obtener datos completos de enemigos seleccionados
+        const enemiesData = selectedEnemies.map(idx => {
+            return window.enemiesDataGlobal ? window.enemiesDataGlobal[idx] : { name: 'Enemigo' };
+        });
+        const epoca = document.getElementById('epoca-select').value;
+        // Guardar en localStorage para la siguiente página
+        localStorage.setItem('chrono_allies', JSON.stringify(alliesData));
+        localStorage.setItem('chrono_enemies', JSON.stringify(enemiesData));
+        localStorage.setItem('chrono_epoca', epoca);
+        fetch('/api/chrono/battle/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                allies: alliesData, 
+                enemies: enemiesData, 
+                epoca 
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'battle started') {
+                window.location.href = 'chrono-battle.html'; // Comentado para depuración
+                console.log('Batalla iniciada. Puedes revisar los logs antes de continuar.');
+            } else {
+                alert('Error al iniciar la batalla: ' + (data.error || 'desconocido'));
+            }
+        })
+        .catch(err => {
+            alert('Error al iniciar la batalla: ' + err);
+        });
+    };
+
+    // --- Cargar datos de equipo ---
+    function loadEquipmentData() {
+        fetch('/api/chrono/equipment/weapons')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    const weaponsObj = data[0].weapons;
+                    equipmentData.weaponsByCharacter = weaponsObj;
+                }
+            })
+            .catch(err => console.error('Error cargando armas:', err));
+        fetch('/api/chrono/equipment/armors')
+            .then(res => res.json())
+            .then(data => {
+                equipmentData.armors = data;
+            })
+            .catch(err => console.error('Error cargando armaduras:', err));
+        fetch('/api/chrono/equipment/helmets')
+            .then(res => res.json())
+            .then(data => {
+                equipmentData.helmets = data;
+            })
+            .catch(err => console.error('Error cargando cascos:', err));
+        fetch('/api/chrono/equipment/accessories')
+            .then(res => res.json())
+            .then(data => {
+                equipmentData.accessories = data;
+            })
+            .catch(err => console.error('Error cargando accesorios:', err));
+    }
+
+    function getWeaponKeyForCharacter(characterName) {
+        const map = {
+            'crono': 'Crono (Katanas)',
+            'marle': 'Marle (Bows)',
+            'lucca': 'Lucca (Guns)',
+            'robo': 'Robo (Mechanical Arms)',
+            'frog': 'Frog (Swords)',
+            'ayla': 'Ayla (Fists)',
+            'magus': 'Magus (Scythes)'
+        };
+        return map[characterName.toLowerCase()] || null;
+    }
+
+    // --- Utilidad para parsear bonus de stats de un string tipo 'Magic +2, Speed+3' ---
+    function parseStatBonuses(effectStr) {
+        const bonuses = {};
+        if (!effectStr || typeof effectStr !== 'string') return bonuses;
+        
+        //console.log('Parseando efecto:', effectStr);
+        
+        // Busca patrones tipo 'Stat +N' o 'Stat+N'
+        const regex = /([A-Za-z ]+) *\+ *([+-]?\d+)/g;
+        let match;
+        while ((match = regex.exec(effectStr)) !== null) {
+            let stat = match[1].trim().replace(/\s+/g, '');
+            let value = parseInt(match[2]);
+            if (!isNaN(value)) {
+                bonuses[stat] = (bonuses[stat] || 0) + value;
+                //console.log(`Encontrado bonus: ${stat} +${value}`);
+            }
+        }
+        
+        // Buscar efectos especiales
+        const specialEffects = [];
+        if (effectStr.toLowerCase().includes('fire damage reduced by 50%')) {
+            specialEffects.push('Resistencia al fuego 50%');
+        }
+        if (effectStr.toLowerCase().includes('fire damage reduced by 80%')) {
+            specialEffects.push('Resistencia al fuego 80%');
+        }
+        if (effectStr.toLowerCase().includes('fire damage absorbed by 50%')) {
+            specialEffects.push('Absorbe fuego 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs fire magic')) {
+            specialEffects.push('Absorbe magia de fuego');
+        }
+        if (effectStr.toLowerCase().includes('water damage absorbed by 50%')) {
+            specialEffects.push('Absorbe agua 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs water magic')) {
+            specialEffects.push('Absorbe magia de agua');
+        }
+        if (effectStr.toLowerCase().includes('lightning damage absorbed by 50%')) {
+            specialEffects.push('Absorbe rayos 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs lightning magic')) {
+            specialEffects.push('Absorbe magia de rayos');
+        }
+        if (effectStr.toLowerCase().includes('shadow damage absorbed by 50%')) {
+            specialEffects.push('Absorbe sombra 50%');
+        }
+        if (effectStr.toLowerCase().includes('absorbs shadow magic')) {
+            specialEffects.push('Absorbe magia de sombra');
+        }
+        if (effectStr.toLowerCase().includes('cuts physical damage by 1/3')) {
+            specialEffects.push('Reduce daño físico 33%');
+        }
+        if (effectStr.toLowerCase().includes('cuts magic attacks by 1/3')) {
+            specialEffects.push('Reduce daño mágico 33%');
+        }
+        if (effectStr.toLowerCase().includes('protects status')) {
+            specialEffects.push('Protege de estados');
+        }
+        if (effectStr.toLowerCase().includes('prevents "chaos" status effect')) {
+            specialEffects.push('Inmune a Caos');
+        }
+        if (effectStr.toLowerCase().includes('prevents "lock" status effect')) {
+            specialEffects.push('Inmune a Bloqueo');
+        }
+        if (effectStr.toLowerCase().includes('prevents "stop" and "slow" status effects')) {
+            specialEffects.push('Inmune a Parar/Lentitud');
+        }
+        if (effectStr.toLowerCase().includes('counterattacks with 50% chance')) {
+            specialEffects.push('Contraataque 50%');
+        }
+        if (effectStr.toLowerCase().includes('attack up 80%, but only attack')) {
+            specialEffects.push('Ataque +80% (solo atacar)');
+        }
+        if (effectStr.toLowerCase().includes('1-time auto-revive')) {
+            specialEffects.push('Auto-revive (1 uso)');
+        }
+        if (effectStr.toLowerCase().includes('mp use cut by 50%')) {
+            specialEffects.push('MP -50%');
+        }
+        if (effectStr.toLowerCase().includes('mp use cut by 75%')) {
+            specialEffects.push('MP -75%');
+        }
+        if (effectStr.toLowerCase().includes('max hp up 25%')) {
+            specialEffects.push('HP máximo +25%');
+        }
+        if (effectStr.toLowerCase().includes('max hp up 50%')) {
+            specialEffects.push('HP máximo +50%');
+        }
+        if (effectStr.toLowerCase().includes('increases speed by 50%')) {
+            specialEffects.push('Velocidad +50%');
+        }
+        
+        bonuses.specialEffects = specialEffects;
+        //console.log('Bonuses finales:', bonuses);
+        return bonuses;
+    }
+
+    // --- Aplica los bonus de equipo a las stats base ---
+    function getModifiedStats(baseStats, equipment, levelStats) {
+        let totalBonuses = {};
+        // Arma
+        if (equipment.weaponObj) {
+            if (equipment.weaponObj.attack) {
+                totalBonuses['Strength'] = (totalBonuses['Strength'] || 0) + Number(equipment.weaponObj.attack);
+            }
+            if (equipment.weaponObj.special) {
+                const b = parseStatBonuses(equipment.weaponObj.special);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        // Armadura
+        if (equipment.armorObj) {
+            if (equipment.armorObj.Def) {
+                totalBonuses['Stamina'] = (totalBonuses['Stamina'] || 0) + Number(equipment.armorObj.Def);
+            }
+            if (equipment.armorObj.Effect) {
+                const b = parseStatBonuses(equipment.armorObj.Effect);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        // Casco
+        if (equipment.helmetObj) {
+            if (equipment.helmetObj.Def) {
+                totalBonuses['Stamina'] = (totalBonuses['Stamina'] || 0) + Number(equipment.helmetObj.Def);
+            }
+            if (equipment.helmetObj.Effect) {
+                const b = parseStatBonuses(equipment.helmetObj.Effect);
+                for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+            }
+        }
+        // Accesorio
+        if (equipment.accessoryObj && equipment.accessoryObj.Effect) {
+            const b = parseStatBonuses(equipment.accessoryObj.Effect);
+            for (const k in b) totalBonuses[k] = (totalBonuses[k] || 0) + b[k];
+        }
+        // Aplica los bonus a las stats base
+        const result = {...baseStats};
+        for (const stat in totalBonuses) {
+            // Mapea nombres comunes
+            let key = stat;
+            if (key.toLowerCase() === 'power') key = 'Strength';
+            if (key.toLowerCase() === 'defense' || key.toLowerCase() === 'def') key = 'Stamina';
+            if (key.toLowerCase() === 'magicdefense' || key.toLowerCase() === 'mdef') key = 'MagicDefense';
+            if (key.toLowerCase() === 'magic') key = 'Magic';
+            if (key.toLowerCase() === 'speed') key = 'Speed';
+            if (key.toLowerCase() === 'hit') key = 'Accuracy';
+            if (key.toLowerCase() === 'stamina') key = 'Stamina';
+            if (key.toLowerCase() === 'stam') key = 'Stamina';
+            if (key.toLowerCase() === 'evade') key = 'Evasion';
+            if (key.toLowerCase() === 'attack') key = 'Strength';
+            result[key] = (result[key] || 0) + totalBonuses[stat];
+        }
+        return { result, totalBonuses };
+    }
+
+    // --- Busca el objeto de equipo por nombre ---
+    function findEquipmentObj(type, name) {
+        if (!name) return null;
+        if (type === 'weapon') {
+            for (const key in equipmentData.weaponsByCharacter) {
+                const arr = equipmentData.weaponsByCharacter[key];
+                const found = arr.find(w => w.name === name);
+                if (found) return found;
+            }
+        } else if (type === 'armor') {
+            return equipmentData.armors.find(a => a.Name === name);
+        } else if (type === 'helmet') {
+            return equipmentData.helmets.find(h => h.Name === name);
+        } else if (type === 'accessory') {
+            return equipmentData.accessories.find(a => a.Name === name);
+        }
+        return null;
+    }
+
+    function updateEquipmentPanel(idx) {
+        const equipmentPanel = document.getElementById('equipment-panel');
+        const noCharacterSelected = document.getElementById('no-character-selected');
+        if (selectedAllies.length === 0) {
+            equipmentPanel.style.display = 'none';
+            noCharacterSelected.style.display = 'block';
+            return;
+        }
+        const showIdx = typeof idx === 'number' ? idx : selectedAllies[0];
+        const character = characterStatsData[showIdx];
+        const weaponKey = getWeaponKeyForCharacter(character.character);
+        let weapons = [];
+        if (weaponKey && equipmentData.weaponsByCharacter && equipmentData.weaponsByCharacter[weaponKey]) {
+            weapons = equipmentData.weaponsByCharacter[weaponKey];
+        }
+        // Busca los objetos equipados
+        const eq = characterEquipment[showIdx] || {};
+        const weaponObj = findEquipmentObj('weapon', eq.weapon);
+        const armorObj = findEquipmentObj('armor', eq.armor);
+        const helmetObj = findEquipmentObj('helmet', eq.helmet);
+        const accessoryObj = findEquipmentObj('accessory', eq.accessory);
+        // Aplica bonus a las stats
+        let baseStats = {};
+        let level = characterLevels[showIdx] || 99;
+        if (character.statsByLevel && character.statsByLevel.length > 0) {
+            let stats = character.statsByLevel.find(s => s.level === level);
+            if (!stats) stats = character.statsByLevel[0];
+            baseStats = {...stats};
+        }
+        const { result: modStats, totalBonuses } = getModifiedStats(baseStats, { weaponObj, armorObj, helmetObj, accessoryObj }, character.statsByLevel);
+        // Muestra las stats con bonus
+        let statsHtml = '';
+        for (const stat in baseStats) {
+            if (typeof baseStats[stat] !== 'number') continue;
+            const bonus = (modStats[stat] || 0) - (baseStats[stat] || 0);
+            if (bonus !== 0) {
+                statsHtml += `<div class="stat-row"><span class="stat-label">${stat}:</span> ${modStats[stat]} (${baseStats[stat]} ${bonus > 0 ? '+' : ''}${bonus})</div>`;
+            } else {
+                statsHtml += `<div class="stat-row"><span class="stat-label">${stat}:</span> ${baseStats[stat]}</div>`;
+            }
+        }
+        document.getElementById('selected-character-name').innerHTML = character.character + '<div style="font-size:0.8em; color:#b0e0b0; margin-top:0.5em;">' + statsHtml + '</div>';
+        // Llenar selectores de equipo con efectos
+        fillEquipmentSelect('weapon-select', weapons, 'name', eq.weapon, 'special', 'attack');
+        fillEquipmentSelect('armor-select', equipmentData.armors, 'Name', eq.armor, 'Effect', 'Def');
+        fillEquipmentSelect('helmet-select', equipmentData.helmets, 'Name', eq.helmet, 'Effect', 'Def');
+        fillEquipmentSelect('accessory-select', equipmentData.accessories, 'Name', eq.accessory, 'Effect');
+        // Añadir event listeners
+        document.getElementById('weapon-select').onchange = (e) => updateCharacterEquipment(showIdx, 'weapon', e.target.value);
+        document.getElementById('armor-select').onchange = (e) => updateCharacterEquipment(showIdx, 'armor', e.target.value);
+        document.getElementById('helmet-select').onchange = (e) => updateCharacterEquipment(showIdx, 'helmet', e.target.value);
+        document.getElementById('accessory-select').onchange = (e) => updateCharacterEquipment(showIdx, 'accessory', e.target.value);
+        equipmentPanel.style.display = 'block';
+        noCharacterSelected.style.display = 'none';
+    }
+
+    function fillEquipmentSelect(selectId, items, nameField, selectedValue, effectField, statField) {
+        const select = document.getElementById(selectId);
+        select.innerHTML = '<option value="">Sin equipar</option>';
+        if (Array.isArray(items)) {
+            items.forEach(item => {
+                if (item && item[nameField]) {
+                    let text = item[nameField];
+                    // Solo añade el stat base si existe y no es null
+                    if (statField && item[statField]) text += ` (+${item[statField]})`;
+                    
+                    // Procesar efectos especiales
+                    let effectText = '';
+                    if (effectField && item[effectField] && item[effectField] !== '-' && item[effectField] !== null) {
+                        const bonuses = parseStatBonuses(item[effectField]);
+                        if (bonuses.specialEffects && bonuses.specialEffects.length > 0) {
+                            effectText = ` [${bonuses.specialEffects.join(', ')}]`;
+                        } else {
+                            effectText = ` (${item[effectField]})`;
+                        }
+                    }
+                    
+                    // Para armas, añade el campo 'special' solo si existe y no es null
+                    let specialText = '';
+                    if (selectId === 'weapon-select' && item.special && item.special !== null) {
+                        const bonuses = parseStatBonuses(item.special);
+                        if (bonuses.specialEffects && bonuses.specialEffects.length > 0) {
+                            specialText = ` [${bonuses.specialEffects.join(', ')}]`;
+                        } else {
+                            specialText = ` (${item.special})`;
+                        }
+                    }
+                    
+                    // Evita duplicados: si effectText y specialText son iguales, solo añade uno
+                    if (effectText && specialText && effectText === specialText) {
+                        specialText = '';
+                    }
+                    text += effectText + specialText;
+                    
+                    const option = document.createElement('option');
+                    option.value = item[nameField];
+                    option.textContent = text;
+                    if (item[nameField] === selectedValue) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                }
+            });
+        }
+    }
+
+    function updateCharacterEquipment(characterIndex, equipmentType, value) {
+        if (!characterEquipment[characterIndex]) {
+            characterEquipment[characterIndex] = {};
+        }
+        characterEquipment[characterIndex][equipmentType] = value || null;
+        // Forzar refresco de stats y tarjetas
+        updateEquipmentPanel(characterIndex);
+        renderCharacters(characterStatsData);
+        console.log(`Equipado ${equipmentType}: ${value} para personaje ${characterIndex}`);
+    }
+
+    // Función para alternar el modo oscuro
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Al cargar la página, aplica el modo oscuro si está guardado
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+    });
+    // Cargar datos de equipo al inicio
+    loadEquipmentData();
+    </script>
+</body>
+</html> 

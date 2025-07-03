@@ -1,0 +1,46 @@
+[
+  {
+    "Name": "Slow",
+    "Effect": "The time between a character's actions is increased."
+  },
+  {
+    "Name": "Stop",
+    "Effect": "The character's ATB gauge freezes, and they cannot act."
+  },
+  {
+    "Name": "Sleep",
+    "Effect": "The character falls asleep and cannot act until they are attacked or it wears off."
+  },
+  {
+    "Name": "Poison",
+    "Effect": "The character continuously loses HP."
+  },
+  {
+    "Name": "Blind",
+    "Effect": "The character's physical attacks are less likely to hit."
+  },
+  {
+    "Name": "Lock",
+    "Effect": "The character cannot use their Techs."
+  },
+  {
+    "Name": "Chaos",
+    "Effect": "The character attacks allies and enemies at random."
+  },
+  {
+    "Name": "HP Down",
+    "Effect": "The character's HP gradually decreases."
+  },
+  {
+    "Name": "Haste",
+    "Effect": "The character's ATB gauge fills faster, so they can act more often."
+  },
+  {
+    "Name": "Protect",
+    "Effect": "The character takes less damage from physical attacks."
+  },
+  {
+    "Name": "Barrier",
+    "Effect": "The character takes less damage from magical attacks."
+  }
+]

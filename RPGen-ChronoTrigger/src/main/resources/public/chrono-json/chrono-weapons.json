@@ -1,0 +1,104 @@
+[
+  {
+    "weapons": {
+    "Crono (Katanas)": [
+      { "name": "Mop", "attack": 1, "special": null },
+      { "name": "Wooden Sword", "attack": 3, "special": null },
+      { "name": "Bronze Blade", "attack": 7, "special": null },
+      { "name": "Steel Saber", "attack": 15, "special": null },
+      { "name": "Silver Sword", "attack": 20, "special": null },
+      { "name": "Thunder Blade", "attack": 25, "special": null },
+      { "name": "Crimson Blade", "attack": 30, "special": "Magic + 2" },
+      { "name": "Mammoth Tusk", "attack": 40, "special": null },
+      { "name": "Slasher", "attack": 43, "special": "Speed + 2" },
+      { "name": "Primeval Blade", "attack": 70, "special": null },
+      { "name": "Zanmato", "attack": 90, "special": "1.5x damage to magical beings" },
+      { "name": "Vajra Sword", "attack": 110, "special": null },
+      { "name": "Empyrean Blade", "attack": 125, "special": null },
+      { "name": "Yaksha Blade", "attack": 135, "special": null },
+      { "name": "Swallow", "attack": 145, "special": "Speed + 3" },
+      { "name": "Onimaru", "attack": 150, "special": null },
+      { "name": "Slasher II", "attack": 155, "special": null },
+      { "name": "Icewyrm", "attack": 160, "special": null },
+      { "name": "Suzaku", "attack": 170, "special": "4x critical hit damage" },
+      { "name": "Rainbow", "attack": 220, "special": "70% critical hit rate" },
+      { "name": "Dreamseeker", "attack": 240, "special": "90% critical hit rate" }
+    ],
+    "Marle (Bows)": [
+      { "name": "Bronze Bowgun", "attack": 3, "special": null },
+      { "name": "Iron Bowgun", "attack": 15, "special": null },
+      { "name": "Silver Bow", "attack": 20, "special": null },
+      { "name": "Bandit's Bow", "attack": 25, "special": null },
+      { "name": "Shaman's Bow", "attack": 40, "special": null },
+      { "name": "Dreamstone Bow", "attack": 60, "special": null },
+      { "name": "Comet Bow", "attack": 80, "special": null },
+      { "name": "Sonic Bow", "attack": 100, "special": "Inflicts Slow" },
+      { "name": "Siren's Kiss", "attack": 140, "special": "Inflicts Stop" },
+      { "name": "Stardust Bow", "attack": 150, "special": "Inflicts Confuse" },
+      { "name": "Valkyrie Bow", "attack": 180, "special": null },
+      { "name": "Venus Bow", "attack": 0, "special": "Deals fixed 777 damage" }
+    ],
+    "Lucca (Guns)": [
+      { "name": "Airgun", "attack": 5, "special": null },
+      { "name": "Pea Shooter", "attack": 7, "special": null },
+      { "name": "Pocket Blaster", "attack": 15, "special": null },
+      { "name": "Plasma Gun", "attack": 25, "special": "Inflicts Stop on robots" },
+      { "name": "Ruby Gun", "attack": 40, "special": null },
+      { "name": "Dreamstone Gun", "attack": 60, "special": null },
+      { "name": "Megablaster", "attack": 80, "special": null },
+      { "name": "Shockwave", "attack": 110, "special": "Inflicts Confuse" },
+      { "name": "Turboshot", "attack": 140, "special": "Speed + 3" },
+      { "name": "Wondershot", "attack": 250, "special": "Damage varies (random)" },
+      { "name": "Spellslinger", "attack": null, "special": "Damage based on last digit of MP" }
+    ],
+    "Robo (Mechanical Arms)": [
+      { "name": "Tin Arm", "attack": 20, "special": null },
+      { "name": "Hammer Arm", "attack": 25, "special": null },
+      { "name": "Mirage Hand", "attack": 30, "special": null },
+      { "name": "Stone Arm", "attack": 40, "special": null },
+      { "name": "Death Claw", "attack": 50, "special": null },
+      { "name": "Magma Hand", "attack": 70, "special": null },
+      { "name": "Megaton Arm", "attack": 90, "special": null },
+      { "name": "Heavy Hand", "attack": 105, "special": null },
+      { "name": "Kaiser Arm", "attack": 120, "special": null },
+      { "name": "Gigaton Arm", "attack": 135, "special": null },
+      { "name": "Teraton Arm", "attack": 150, "special": null },
+      { "name": "Dragon Arm", "attack": 170, "special": null },
+      { "name": "Crisis Arm", "attack": 1, "special": "Damage based on last digit of HP" },
+      { "name": "Apocalypse Arm", "attack": 0, "special": "May deal 9,999 damage (critical)" }
+    ],
+    "Frog (Swords)": [
+      { "name": "Bronze Sword", "attack": 6, "special": null },
+      { "name": "Iron Sword", "attack": 10, "special": null },
+      { "name": "Masamune", "attack": 75, "special": null },
+      { "name": "Radiant Blade", "attack": 90, "special": null },
+      { "name": "Smiter's Blade", "attack": 105, "special": "1.5x damage to magical beings" },
+      { "name": "Rune Blade", "attack": 120, "special": "Magic + 4" },
+      { "name": "Demonslayer", "attack": 120, "special": "2x damage to magical beings" },
+      { "name": "Brave Sword", "attack": 135, "special": null },
+      { "name": "Dinoblade", "attack": 160, "special": "Strength + 5" },
+      { "name": "Masamune (Upgraded)", "attack": 200, "special": null }
+    ],
+    "Ayla (Fists)": [
+      { "name": "Fist (Level 1)", "attack": null, "special": null },
+      { "name": "Fist (Level 24)", "attack": null, "special": null },
+      { "name": "Fist (Level 48)", "attack": null, "special": null },
+      { "name": "Iron Fist", "attack": null, "special": "Inflicts Confuse" },
+      { "name": "Bronze Fist", "attack": null, "special": "Critical hits deal 9,999 damage" }
+    ],
+    "Magus (Scythes)": [
+      { "name": "Moonfall Scythe", "attack": 130, "special": null },
+      { "name": "Headman's Scythe", "attack": 135, "special": null },
+      { "name": "Hadean Sickle", "attack": 150, "special": null },
+      { "name": "Judgment Scythe", "attack": 155, "special": "Inflicts Stop" },
+      { "name": "Doom Scythe", "attack": 160, "special": "Damage increases when allies KO'd" },
+      { "name": "Dreamreaper", "attack": 180, "special": "4x critical hit damage" }
+    ],
+    "Unequippable": [
+      "Broken Blade", 
+        "Broken Hilt", 
+        "Masamune (Unequippable)"
+      ]
+    }
+  }
+]
