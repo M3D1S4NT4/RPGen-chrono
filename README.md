@@ -86,20 +86,18 @@ RPGen-ChronoTrigger/
 
 1.  Clona el repositorio en tu máquina local.
 2.  Descarga el núcleo desde `https://github.com/M3D1S4NT4/RPGen`
-3.  Instala el núcleo usando
-4.  ```bash
+3.  Abre una terminal en el directorio raíz del núcleo
+4.  Instala el núcleo usando
+    ```bash
     mvn clean install
     ```
-    en la carpeta del núcleo
-5.  Desde la raíz del proyecto de Chrono Trigger, ejecuta el siguiente comando en la terminal:
-    ```bash
-    mvn spring-boot:run
-    ```
-6.  El servidor se iniciará en `http://localhost:4567`.
+5.  Abre una terminal en el directorio raíz del proyecto.
+6.  Ejecuta el comando `mvn spring-boot:run` para compilar el proyecto y descargar las dependencias.
+7.  Abre tu navegador y ve a `http://localhost:4567`.
 
 ### Uso del Sistema
 
-1.  **Selección de Equipos**: Abre `http://localhost:4567/chrono-team.html` en tu navegador.
+1.  **Selección de Equipos**: Abre 1 en tu navegador.
 2.  **Elige a tus Aliados**: Haz clic en hasta 3 personajes para añadirlos a tu equipo. Puedes ajustar su nivel y ver cómo cambian sus estadísticas.
 3.  **Equipa a tus Personajes**: Al seleccionar un aliado, el panel de equipamiento se activará. Elige su arma, armadura, casco y accesorio de las listas desplegables.
 4.  **Selecciona a los Enemigos**: Usa el menú desplegable para elegir una era y haz clic en hasta 5 enemigos para formar el equipo contrario.
