@@ -1,4 +1,4 @@
-# RPGen-Chrono: Generador de Combates de Chrono Trigger
+# RPGen - Generador de Combates de Chrono Trigger
 
 Extensión del sistema RPGen que recrea fielmente el sistema de combate del clásico JRPG **Chrono Trigger**. Permite a los usuarios seleccionar personajes, equiparlos con armas y accesorios del juego original, y enfrentarlos a enemigos icónicos de todas las eras en un sistema de batalla ATB (Active Time Battle).
 
